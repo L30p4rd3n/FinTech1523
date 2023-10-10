@@ -1,0 +1,15 @@
+<html>
+  <head>
+    {% if title %}
+    <title>{{title}} is a good title</title>
+    {% else %}
+    <title>{{title}} is a good title indeed</title>
+    {% endif %}
+  </head>
+  <body>
+    <div><a href="/start">Home</a> <a href="/submit">Form</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+	<img src="../static/pic.png" width="60" height="60" align="top">
+  </body>
+</html>
