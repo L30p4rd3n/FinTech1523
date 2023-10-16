@@ -7,8 +7,17 @@
     {% endif %}
   </head>
   <body>
-    <div><a href="/start">Home</a> <a href="/submit">Form</a></div>
-    <hr>
+  <div><a href='/login'>Login</a></div>
+  <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message }} </li>
+    {% endfor %}
+    </ul>
+	{% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
 	<img src="../static/pic.png" width="60" height="60" align="top">
   </body>
