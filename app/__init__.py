@@ -1,10 +1,10 @@
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, request
 import os
 
 # from wtforms import Form, BooleanField, StringField, PasswordField, validators
 # from wtforms.validators import DataRequired
 from app import forms
-
+from app import db
 
 # class LoginForm(Form):
 #    username = StringField('Username', [validators.Length(min=4, max=25)])
@@ -76,15 +76,27 @@ def main_menu():  # можно сунуть в отдельный файл
                            post=post)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = forms.LoginForm()
-    if form.validate_on_submit():
-        flash('Login requested for OpenID="' + form.openid.data + '", remember_me=' + str(form.remember_me.data))
-        return redirect('/index')
-    return render_template('login.html',
-                           title='Sign In',
-                           form=form)
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # !!!проверить установленные библиотеки, поставить, если что где нужно(по учебнику)!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+@app.route('/test/', methods=['POST', 'GET'])
+def test():
+    message = ''
+    username = request.form.get('username')  # запрос к данным формы
+    password = request.form.get('password')
+    #user_id = 0
+    #if username:      # not working
+    #    user_id += 1;
+    #    db.c.execute(f"""
+    #INSERT INTO data_from_form VALUES
+    #    ({user_id},{username}),
+    #    """)
+    if username == 'root' and password == 'pass':  # captcha-database could work like this: we take a pic ind a key for
+        # it to display on screen
+        message = "Correct username and password"
+        return redirect('/start')
+    else:
+        message = 'a' # define the way to not get to False at any circumstances
+
+
+    return render_template('test.html', message=message)
