@@ -1,24 +1,72 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    {% if title %}
-    <title>{{title}} is a good title</title>
-    {% else %}
-    <title>{{title}} is a good title indeed</title>
-    {% endif %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="FinTech servise">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Таверна.Fin</title>
+
+    <!-- Bootstrap core CSS -->
+<link href="static/assets/dist/css/bootstrap.css" rel="stylesheet">
+    </body>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="/static/carousel.css" rel="stylesheet">
   </head>
   <body>
-  <div><a href='/test'>Test Form</a></div>
-  <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-	{% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-	<img src="../static/pic.png" width="60" height="60" align="top">
-  </body>
-</html>
+    <header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand">Бар у экономистов</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Интерестные штучки</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href=https://stepik.org/course/61179/promo target="_blank">Курсы финансовой грамотности</a>
+            <a class="dropdown-item" href=https://www.cbr.ru/ target="_blank">Центральный банк</a>
+            <a class="dropdown-item" href='/exchange_rates' target="_blank">Коттировки</a>
+            <a class="dropdown-item" href=https://istina.msu.ru/journals/97263/ target="_blank">Финансовые исследования</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Контакты</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href=https://discord.gg/YgX627wHw target="_blank">Дискорд</a>
+          </div>
+        </li>
+      </ul>
+	  {% with messages = get_flashed_messages() %}
+	  {% if username %}
+	  <div class='username'> {{ username[0] }} </div>
+	  {% else %}
+	  <div class='login-or-sign-up'> <a href='/login'>Log In</a></div>
+	  {% endif %}
+	{% endwith %}
+      <form class="form-inline mt-2 mt-md-0">
+        <input type="text" name=text" class="search" placeholder"Search here!>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">поиск</button>
+      </form>
+    </div>
+  </nav>
+</header>
+{% block content %}{% endblock %}
