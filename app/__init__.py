@@ -1,27 +1,26 @@
-from flask import Flask, render_template, redirect, flash, request, session, g, url_for
-from flask_login import LoginManager
+from flask import Flask, render_template, redirect, request, url_for, current_app, flash
+from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from app import forms
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, login_user, logout_user
 
+from app import forms
+
+app = Flask(__name__)
+
+app.config['SECRET_KEY'] = 'qwert'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 
 db = SQLAlchemy()
 
+db.init_app(app)
 
-class User(db.Model):
+
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
 
-
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = 'qwert'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
-db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.login_view = '/login'
@@ -30,8 +29,8 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    # since the user_id is just the primary key of our user table, use it in the query for the user
-    return User.query.get(int(user_id))
+    return User.get(user_id)
+
 
 @app.route('/')
 @app.route('/index')
@@ -89,6 +88,8 @@ def exchange_rates():  # можно сунуть в отдельный файл
                            title='a',
                            user=user,
                            post=post)
+
+
 @app.route('/register', methods=["GET", 'POST'])
 def signup_post():
     email = request.form.get('email')
@@ -110,9 +111,8 @@ def signup_post():
 
     return redirect('login')  # might have to do different one here
 
-
 @app.route('/login', methods=["GET", 'POST'])
-def login_post():
+def login():
     email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
@@ -123,8 +123,9 @@ def login_post():
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('/login'))  # if the user doesn't exist or password is wrong, reload the page
-    # login code goes here
-    login_user(user, remember=remember)
-    return redirect(url_for('/'))
-
+        return redirect('/register')  # if the user doesn't exist or password is wrong, reload the page
+ #login code goes here
+# login_user(user, remember=remember)
+    return redirect('/')
+ #def login():
+ #  return render_template('test.html')
