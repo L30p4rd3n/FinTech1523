@@ -1,6 +1,12 @@
-import app
-from app import User, db
-with app.app_context():
-    zero = User(email = 'test@@', password = 'abc', name = 'asda')
-    db.session.add(zero)
-    db.session.commit()
+from app import db, create_app
+
+
+def create_user(app):
+    with app.app_context():
+        import models
+        db.session.add(models.User)
+        db.commit()
+    return "asda"
+
+app = create_app()
+create_user(app=app)

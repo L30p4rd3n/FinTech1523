@@ -57,7 +57,7 @@
       </ul>
 	  {% with messages = get_flashed_messages() %}
 	  {% if username %}
-	  <div class='username'> {{ username[0] }} </div>
+	  <div class='username'> {{ username }} </div>
 	  {% else %}
 	  <div class='login-or-sign-up'> <a href='/login'>Log In</a></div>
 	  {% endif %}
