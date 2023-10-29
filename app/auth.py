@@ -2,16 +2,20 @@ from flask import render_template, request, redirect, url_for, flash, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 
-from app import db
-from .models import User
+from app import db, User
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route('/')
 @auth.route('/index')
 def index1():
-    username = current_user
-    flash(username)
+    if current_user.is_anonymous:
+        username = ''
+        flash("not registered")
+    else:
+        username = current_user
+        flash(username)
     return render_template('index.html', username=username)
 
 
@@ -107,16 +111,17 @@ def login():
 
     # check if the user actually exists
     # take the user-supplied password, hash it, and compare it to the hashed password in the database
-    if not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
+    if user is None or not check_password_hash(user.password, password):
+        flash("Something does not quite come together. Either your input data is incorrect or ")
         return redirect((url_for('auth.login')))
-    if not user:
-        return redirect(url_for('auth.register'))  # if the user doesn't exist or password is wrong, reload the page
- #login code goes here
-    login_user(user, remember=remember)
+
+    # login code goes here
+    login_user(user, remember=True)
     return redirect(url_for('auth.index1'))
- #def login():
- #  return render_template('test.html')
+
+
+# def login():
+#  return render_template('test.html')
 
 @auth.route('/logout')
 def logout():
