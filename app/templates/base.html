@@ -55,13 +55,13 @@
           </div>
         </li>
       </ul>
-	  {% with messages = get_flashed_messages() %}
-	  {% if messages %}
-	  <div class='username'> {{ messages[0] }} </div> 
+	  {% if current_user.is_authenticated %}
+	  <div class='username'> {{ name }}</div> 
 	  {% else %}
-	  <div class='login-or-sign-up'> <a href='/login'>Log In</a></div>
+	  <div class='log-in'> <a href='/login'>Log In  </a></div>
+	  <p> or </p>
+	  <div class='register'> <a href='/register'>  Register</a></div>
 	  {% endif %}
-	{% endwith %}
       <form class="form-inline mt-2 mt-md-0">
         <input type="text" name=text" class="search" placeholder"Search here!>
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">поиск</button>

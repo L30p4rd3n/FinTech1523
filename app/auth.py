@@ -11,12 +11,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/index')
 def index1():
     if current_user.is_anonymous:
-        username = ''
-        flash("not registered")
+        name = ''
     else:
-        username = current_user
-        flash(username)
-    return render_template('index.html', username=username)
+        name = current_user.name
+    return render_template('index.html', name=name)
 
 
 @auth.route('/index2')
@@ -83,7 +81,7 @@ def register():
     name = request.form.get('name')
     password = request.form.get('password')
     user = User.query.filter_by(
-        email=email).first()  # if this returns a user, then the email already exists in database
+        email=email).first()
 
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
         return redirect(url_for('auth.register'))
@@ -93,7 +91,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.login"))  # <-------- make it login itself after registration
 
 
 @auth.route('/login')
@@ -116,7 +114,7 @@ def login():
         return redirect((url_for('auth.login')))
 
     # login code goes here
-    login_user(user, remember=True)
+    login_user(user, remember=remember)
     return redirect(url_for('auth.index1'))
 
 
@@ -124,6 +122,7 @@ def login():
 #  return render_template('test.html')
 
 @auth.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('auth.index1'))
