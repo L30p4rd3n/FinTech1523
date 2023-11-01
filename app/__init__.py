@@ -6,7 +6,7 @@ db = SQLAlchemy()
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'qwert'
+app.config['SECRET_KEY'] = 'aGRjZmRzNDIzMzRmc2QzNDemZnMTIzZGY'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 db.init_app(app)
 
