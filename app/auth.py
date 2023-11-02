@@ -49,7 +49,7 @@ def exchange_rates():  # можно сунуть в отдельный файл
     price1 = f"{prices[0] + ' ' + prices[1]} buy/sell".replace('[]', '')
     price2 = f"{prices[2] + ' ' + prices[3]} buy/sell".replace('[]', '')
     price3 = f"{prices[4] + ' ' + prices[5]} buy/sell".replace('[]', '')
-    user = {'nickname': 'asda'}
+    user = {'nickname': User.name}
     post = [
         {
             'value': {'currency': 'Yuan, CNY'},
