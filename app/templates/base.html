@@ -57,6 +57,7 @@
       </ul>
 	  {% if current_user.is_authenticated %}
 	  <div class='username'> {{ name }}</div> 
+	  <div class='logoff'> <a href='/logout'>  Log Out  </a></div>
 	  {% else %}
 	  <div class='log-in'> <a href='/login'>Log In  </a></div>
 	  <p> or </p>
