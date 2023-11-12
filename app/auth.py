@@ -31,8 +31,19 @@ def index3():
 @auth.route('/profile')
 @login_required
 def profile():
+    userattrib = current_user.UserAttrib
     name = current_user.name
-    return render_template('profile.html', name=name)
+    if userattrib == 1:
+        flash("совет 1")
+        flash("Совет 2")
+        flash("СоВеТ 3")
+        flash("Это лишь пример выгрузки советов с бэк-енда, дальше - больше :)")
+    elif userattrib == 2:
+        flash("Это")
+        flash("всего")
+        flash("лишь")
+        flash("пример выгрузки советов с бэк-енда, дальше - больше :)")
+    return render_template("profile.html", name=name)
 
 
 @auth.route("/exchange_rates")
@@ -87,7 +98,7 @@ def register():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
-    UserAttrib = 1
+    UserAttrib = request.form.get('userattrib')
     user = User.query.filter_by(  # smth should be made about checking whether it is an existing email or not, somehow
         email=email).first()
 
