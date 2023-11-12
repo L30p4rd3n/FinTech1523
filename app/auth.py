@@ -13,7 +13,7 @@ def index1():
     if current_user.is_anonymous:
         name = ''
     else:
-        name = current_user.name
+        name = current_user.name  # <------- shows empty if left empty, how 'bout fixing it later, huh?
     return render_template('index.html', name=name)
 
 
@@ -26,6 +26,13 @@ def index2():
 @auth.route('/index3')
 def index3():
     return render_template('index3.html')
+
+
+@auth.route('/profile')
+@login_required
+def profile():
+    name = current_user.name
+    return render_template('profile.html', name=name)
 
 
 @auth.route("/exchange_rates")
@@ -80,14 +87,15 @@ def register():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
-    user = User.query.filter_by(
+    UserAttrib = 1
+    user = User.query.filter_by(  # smth should be made about checking whether it is an existing email or not, somehow
         email=email).first()
 
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
         return redirect(url_for('auth.register'))
 
         # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), UserAttrib=UserAttrib)
     db.session.add(new_user)
     db.session.commit()
 

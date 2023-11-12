@@ -56,17 +56,20 @@
         </li>
       </ul>
 	  {% if current_user.is_authenticated %}
-	  <div class='username'> {{ name }}</div> 
-	  <div class='logoff'> <a href='/logout'>  Log Out  </a></div>
-	  {% else %}
-	  <div class='log-in'> <a href='/login'>Log In  </a></div>
-	  <p> or </p>
-	  <div class='register'> <a href='/register'>  Register</a></div>
+	  <p> {{ name }}
+	  <div class='username'><a href='/profile'> Profile </a></div> 
 	  {% endif %}
       <form class="form-inline mt-2 mt-md-0">
         <input type="text" name=text" class="search" placeholder"Search here!>
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">поиск</button>
       </form>
+	  {% if current_user.is_authenticated %}
+	  <div class='logoff'> <a href='/logout'> Log Out </a></div> 
+	  {% else %}
+	  <div class='log-in'> <a href='/login'>Log In  </a></div>
+	  <p> or </p>
+	  <div class='register'> <a href='/register'>  Register</a></div>
+	  {% endif %}
     </div>
   </nav>
 </header>

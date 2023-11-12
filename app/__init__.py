@@ -20,6 +20,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
+    UserAttrib = db.Column(db.Integer)  # could possibly be changed to a list of links??
+    # how 'bout making a separate database to take the links from for filling?
 
 
 @login_manager.user_loader
@@ -30,3 +32,4 @@ def load_user(user_id):
 from app.auth import auth as auth_blueprint
 
 app.register_blueprint(auth_blueprint)
+
