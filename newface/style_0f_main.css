@@ -1,0 +1,99 @@
+/* Стили для шапки */
+.header {
+    width: 100%;
+    padding: 10px; /* Внутренний отступ шапки */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    display: flex; /* Выравнивание элементов в шапке по горизонтали */
+    align-items: center; /* Выравнивание элементов по вертикали */
+    justify-content: flex-start; /* Выравнивание по краю слева */
+    background-color: #ffd573;
+    height: 80px;
+    position: relative; /* убираем фиксированную позицию */
+    z-index: 1; /* устанавливаем z-index, чтобы контент не наслаивался на шапку */
+}
+.downer{
+    height: 164px;
+}
+.fixed-end {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+/* Стили для заголовка */
+.header-text {
+    font-size: 28px;
+    align-items: center;
+    padding: 20px;
+}
+
+.header-enter {
+    font-size: 28px;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    justify-content: flex-end;
+}
+
+/* Стили для изображения */
+.header-img {
+    align-items: center;
+    max-width: 60px;
+    height: 60px;
+    margin-right: 15px; /* Отступ справа от изображения */
+}
+
+/* Стили для ссылки */
+header a {
+    display: block;
+    margin-top: 10px;
+    margin-left: 15px; /* Отступ справа от ссылки */
+    text-decoration: none;
+    color: #a67400;
+}
+
+/* Стили для контента */
+.content {
+    margin-top: 100px; /* добавлен верхний отступ, равный высоте шапки */
+    margin-left: 20px; /* добавлен левый отступ */
+}
+
+/* Стили для абзацев */
+.paragraphs {
+    display: flex;
+    justify-content: space-around;
+}
+.paragraphs-of-down{
+    display: flex;
+    justify-content: space-between; /* Распределение элементов между по краям контейнера */
+}
+
+/* Стили для кнопки */
+.big-blue-button {
+    background-color: blue;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.image-for-miphi{
+    max-width: 120px;
+    height: 40px;
+}
+.image-for-tg{
+    max-width: 20px;
+    height: 20px;
+}
+.fixed-right {
+    position: fixed;
+    right: 20px;
+}
