@@ -1,61 +1,12 @@
-{%extends 'base.html'%}
+{% extends "base.html" %}
 {% block content %}
-<!-- Bootstrap core CSS -->
-<link href="../static/assets/dist/css/bootstrap.css" rel="stylesheet">
-    </body>
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-	
-<main role="main">
-
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-3">Добро пожаловать</h1>
-      <p>Это страница наш проект по разработке FinTech сервиса</p>
-      <p><a class="btn btn-primary btn-lg" href='/index2' target="_blank" role="button">Узнай больше &raquo;</a></p>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Example row of columns -->
-    <div class="row">
-      <div class="col-md-4">
-        <h2>Великая мудрость</h2>
-        <p>Если хочешь быть богатым, нужно быть финансово грамотным.</p>
-        <p><a class="btn btn-secondary" href=https://stepik.org/course/61179/promo target="_blank" role="button"> Эй я хочу быть финансово грамотным</a></p>
-      </div>
-      <div class="col-md-4">
-        <h2>При поддержке НИЯУ МИФИ</h2>
-        <p>Спасибо за вашу ценную поддержку, университет НИЯУ МИФИ! Мы очень ценим ваше участие в нашем образовательном пути.</p>
-        <p><a class="btn btn-secondary" href=https://www.youtube.com/watch?v=dQw4w9WgXcQ target="_blank"  role="button">Сайт МИФИ</a></p>
-      </div>
-    </div>
-
-    <hr>
-
-  </div> <!-- /container -->
-
-</main>
-
-<footer class="container">
-  <p>&copy; Компания школьников 2027</p>
-</footer>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="static/assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../static/assets/dist/js/bootstrap.bundle.js"></script></body>
-</html>
+        <div class="content">
+            <h1 class = "left">Заголовок H1</h1>
+            <h2>Заголовок H2</h2>
+            <div class="paragraphs-container">
+                <p>Первый абзац</p>
+                <p>Второй абзац</p>
+            </div>
+            <button class="big-blue-button" onclick="window.location.href='/profile';">Хочу знать свой финансовый профиль</button>
+        </div>
 {% endblock %}

@@ -1,76 +1,1 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="FinTech servise">
-    <meta name="generator" content="Jekyll v4.0.1">
-    <title>Таверна.Fin</title>
-
-    <!-- Bootstrap core CSS -->
-<link href="static/assets/dist/css/bootstrap.css" rel="stylesheet">
-    </body>
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
-    <!-- Custom styles for this template -->
-    <link href="/static/carousel.css" rel="stylesheet">
-  </head>
-  <body>
-    <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand">Бар у экономистов</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Интерестные штучки</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href=https://stepik.org/course/61179/promo target="_blank">Курсы финансовой грамотности</a>
-            <a class="dropdown-item" href=https://www.cbr.ru/ target="_blank">Центральный банк</a>
-            <a class="dropdown-item" href='/exchange_rates' target="_blank">Коттировки</a>
-            <a class="dropdown-item" href=https://istina.msu.ru/journals/97263/ target="_blank">Финансовые исследования</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Контакты</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href=https://discord.gg/YgX627wHw target="_blank">Дискорд</a>
-          </div>
-        </li>
-      </ul>
-	  {% if current_user.is_authenticated %}
-	  <p> {{ name }}
-	  <div class='username'><a href='/profile'> Profile </a></div> 
-	  {% endif %}
-      <form class="form-inline mt-2 mt-md-0">
-        <input type="text" name=text" class="search" placeholder"Search here!>
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">поиск</button>
-      </form>
-	  {% if current_user.is_authenticated %}
-	  <div class='logoff'> <a href='/logout'> Log Out </a></div> 
-	  {% else %}
-	  <div class='log-in'> <a href='/login'>Log In  </a></div>
-	  <p> or </p>
-	  <div class='register'> <a href='/register'>  Register</a></div>
-	  {% endif %}
-    </div>
-  </nav>
-</header>
-{% block content %}{% endblock %}
+<!DOCTYPE html>	<html lang="en">    <head>        <meta charset="UTF-8">        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">        <meta name="description" content="FinTech project">        <meta name="author" content="darkguardian22 and L30p4rd3n">        <meta name="generator" content="Jekyll v4.0.1">		    <title>Таверна.Fin</title>    <link rel="stylesheet" href="/static/assets/dist/css/styles.css">    </head>    <body class="body-text">        <header class="header fixed-top">            <a href="/"><img class = "header-img" src="/static/img/FinTech.svg"></a>            <p class = "header-text" style = "color: #a67400">Таверна.FIN</p>            <p class = "header-text" style = "color: #a67400">Полезные ссылки</p>			{% if not current_user.is_authenticated %}			<button class="header-enter fixed-right login-button" onclick="window.location.href='/login';"> Войти</button>			{% else %}			<button class="header-enter fixed-right login-button" onclick="window.location.href='/profile';"> {{ current_user.login }} - Профиль</button> 			{% endif %}        </header>		<div class="content">		{% block content %}		{% endblock %}		</div>				<div class="header downer fixed-end">            <div class="paragraphs" style = "justify-content: space-between;">                <div>                    <a href="http://1523.mephi.ru"><img class = "image-for-mephi" src="/static/img/lyceum.svg"></a>					<a href="http://mephi.ru"><img src="/static/img/mephi-1.svg"></a>                    <h2 class="footer-text" style="font-size: 14px">Данный сайт является учебным проектом учеников Лицея 1523</h2>                    <h2 class="footer-text" style="font-size: 14px">Предуниверситария НИЯУ МИФИ. Спасибо нашим руководителям за </h2>                    <h2 class="footer-text" style="font-size: 14px">поддержку и участие в нашем образовательном пути!</h2>                </div>                <div class = "fixed-right">                         <h1 style="font-size: 32px">Авторы</h1>                    <a href="http://t.me/L30p4rd3n" style = "text-decoration:none"><div class="author">                        <img class="image-for-tg" src="/static/img/telegram.svg" alt="Андрей Огибин, 10Н">                        <span class="footer-text" style="font-size: 12px">Андрей Огибин, 10Н</span>                    </div></a>                    <a href="http://t.me/dark_guardian22" style = "text-decoration:none"><div class ="author">                        <img class="image-for-tg" src="/static/img/telegram.svg" alt="Наумов Владимир, 10Н">                        <span class="footer-text" style="font-size: 12px">Наумов Владимир, 10Н</span>                    </div></a>                </div>            </div>        </div>    </body>

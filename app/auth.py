@@ -1,8 +1,10 @@
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+import flask
+from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
+import random
 
-from app import db, User
+from app import db, User, Advise, Stocks
 
 auth = Blueprint('auth', __name__)
 
@@ -11,42 +13,41 @@ auth = Blueprint('auth', __name__)
 @auth.route('/index')
 def index1():
     if current_user.is_anonymous:
-        name = ''
+        login = ''
     else:
-        name = current_user.name  # <------- shows empty if left empty, how 'bout fixing it later, huh?
-    return render_template('index.html', name=name)
-
-
-@auth.route('/index2')
-@login_required
-def index2():
-    return render_template('index2.html')
-
-
-@auth.route('/index3')
-def index3():
-    return render_template('index3.html')
+        login = current_user.login
+    return render_template('index.html', login=login)
 
 
 @auth.route('/profile')
 @login_required
 def profile():
-    userattrib = current_user.UserAttrib
-    name = current_user.name
-    if userattrib == 1:
-        flash("совет 1")
-        flash("Совет 2")
-        flash("СоВеТ 3")
-        flash("Это лишь пример выгрузки советов с бэк-енда, дальше - больше :)")
-    elif userattrib == 2:
-        flash("Это")
-        flash("всего")
-        flash("лишь")
-        flash("пример выгрузки советов с бэк-енда, дальше - больше :)")
-    return render_template("profile.html", name=name)
+    is_new = current_user.new_user
+    login = current_user.login
+    if is_new == 0:
+        if int(current_user.is_risky) > 55:
+            soveti = Advise.query.filter_by(adv_type='1').all()
+            for i in range(3):
+                flash(soveti[i].adv)
+        else:
+            soveti = Advise.query.filter_by(adv_type='2').all()
+            for i in range(3):
+                flash(soveti[i].adv)
+        if int(current_user.invest) > 75:
+            soveti = Advise.query.filter_by(adv_type='3').all()
+            for i in range(3):
+                flash(soveti[i].adv)
+        else:
+            soveti = Advise.query.filter_by(adv_type='4').all()
+            for i in range(3):
+                flash(soveti[i].adv)
+        return render_template("profile.html", login=login)
+    else:
+        return render_template("gamebutt.html", login=login)
 
 
 @auth.route("/exchange_rates")
+@login_required
 def exchange_rates():  # можно сунуть в отдельный файл
     import requests
     from bs4 import BeautifulSoup
@@ -57,6 +58,11 @@ def exchange_rates():  # можно сунуть в отдельный файл
     page = BeautifulSoup(requests.get(link).text, 'html.parser')
     values = page.find_all('div', class_='col-md-2 col-xs-9 _right mono-num')
     prices = []
+    login = current_user.login
+    if values == '' or len(values) < 1:
+        post = [{"value": "NONE",
+		"body": "Result is NONE right now"}]
+        return render_template("exchange_rates.html", login=login, post=post)
     ''
     ''
     ''
@@ -85,7 +91,8 @@ def exchange_rates():  # можно сунуть в отдельный файл
     return render_template("exchange_rates.html",
                            title='a',
                            user=user,
-                           post=post)
+                           post=post,
+                           login=login)
 
 
 @auth.route('/register')
@@ -96,21 +103,28 @@ def register_page():
 @auth.route('/register', methods=["GET", 'POST'])
 def register():
     email = request.form.get('email')
-    name = request.form.get('name')
+    login = request.form.get('login')
     password = request.form.get('password')
-    UserAttrib = request.form.get('userattrib')
-    user = User.query.filter_by(  # smth should be made about checking whether it is an existing email or not, somehow
-        email=email).first()
+    if password == '' or login == '' or password == '':
 
-    if user:  # if a user is found, we want to redirect back to signup page so user can try again
+
+        flash("Остались незаполненные поля. Просим отправить данные заново, заполнив все поля") # ебнуть js и REST?
+
+
+        return redirect("/register")
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        flash("Данный пользователь уже существует.")
         return redirect(url_for('auth.register'))
-
-        # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), UserAttrib=UserAttrib)
+    new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=0,
+                    is_risky=0, invest=0)
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for("auth.login"))  # <-------- make it login itself after registration
+    login_user(new_user)
+
+    return redirect("/")
 
 
 @auth.route('/login')
@@ -119,23 +133,32 @@ def login_page():
 
 
 @auth.route('/login', methods=["GET", 'POST'])
-def login():
-    email = request.form.get('email')
+def log_in():
+    login = request.form.get('login')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
-    user = User.query.filter_by(email=email).first()
-
-    # check if the user actually exists
-    # take the user-supplied password, hash it, and compare it to the hashed password in the database
-    if user is None or not check_password_hash(user.password, password):
-        flash("Something does not quite come together. Either your input data is incorrect or ")
-        return redirect((url_for('auth.login')))
+    user = User.query.filter_by(login=login).first()
+    if not user:
+        return redirect("/login")
+    if not check_password_hash(user.password, password):
+        flash("Что-то не получается. Возможно, ваши данные не верны или ")
+        return redirect(url_for('auth.log_in'))
 
     # login code goes here
     login_user(user, remember=remember)
     return redirect(url_for('auth.index1'))
 
+
+@auth.route('/test')
+def test_page():
+    return render_template('test.html')
+@auth.route('/game')
+@login_required
+def game_page():
+    if current_user.new_user == 0:
+        return redirect('/profile')
+    return render_template('game.html', login=current_user.login)
 
 # def login():
 #  return render_template('test.html')
@@ -145,3 +168,9 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.index1'))
+
+@auth.route('/send')
+def viewapi():
+    return render_template("send.html")
+
+

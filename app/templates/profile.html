@@ -1,22 +1,22 @@
 {% extends "base.html" %}
-
 {% block content %}
+	<script src="/static/assets/dist/js/profile.js"></script>
 
-<!--Something with user should be put here-->
-
-<h1>
-Welcome, {{ name }}!
-</h1>
-
-<h2>Советы для Вас:</h2>
-
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-{% for i in messages %}
-<div class="messages">
-<h3> {{ i }} </h3>
-</div>
-{%endfor%}
-{%endif%}
-{%endwith%}
+        <div class="content"> 
+            <a class = "center"> Добро пожаловать, </a>
+            <div class="center" style = "margin-top: 20px;">
+                <a>ФИО:</a>
+                <input type="last_name" class="inputfullname" id="last_name" size="20" required placeholder="Фамилия" style="padding-left: 15px;"/>
+                <input type="first_name" class="inputfullname" id="first_name" size="20" required placeholder="Имя" style="padding-left: 15px;"/>
+                <input type="surname" class="inputfullname" id="surname" size="20" required placeholder="Отчество" style="padding-left: 15px;"/>
+                <button class="soxr" id = "soxr">Сохранить</button>
+            </div>
+            <div class ="center">
+                <input type="old_password" class = "inputdata" id = "old_password" size ="20" required placeholder= "Старый пароль" style="padding-left: 15px; margin-right: 10px;"/>
+                <input type="new_password" class = "inputdata" id = "new_password" size ="20" required placeholder= "Новый пароль" style="padding-left: 15px; margin-right: 10px;"/>
+                <button class="soxr" id = "update" onclick="updatePassword('/api/passwd_change');">Обновить</button>
+            </div>
+            <div class = "center"><button class = "center del_button" style = "color: #ff0000;" onclick = "deleteUser('/api/delete_user');" >Удалить аккаунт</button></div>
+        </div>
+        
 {% endblock %}
