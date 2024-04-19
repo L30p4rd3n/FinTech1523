@@ -1,13 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<script src="/static/assets/dist/js/requests.js"></script>
+
         <div class="content">
 			<form method="post" action="/login">
             <h1 class = "center" style ="color: #666666; margin-bottom: 0;">Войти</h1>
-            <div class = "center"> <input type="text" class="inputdata center" id="login" name="login" size="20" required placeholder="Логин" style="padding-left: 15px;"/></div>
-            <div class = "center"> <input type="password" class="inputdata center" id="password" name="password" size="20" required  placeholder="Пароль" style="padding-left: 15px;"/> </div>
-            <div class = "center"> <p style="margin-bottom: 0px;"><input type="checkbox" checked name="remember"> Запомнить меня</p> </div>
-            <div class = "center"> <button class="big-blue-button" type="submit" style="width: 294px; padding-left: 15px;">Войти</button> </div>
+            <div class = "center"> <input type="text" class="inputdata center login-field" id="login" name="login" size="20" required placeholder="Логин" style="padding-left: 15px;"/></div>
+            <div class = "center "> <input type="password" class="inputdata center login-field" id="password" name="password" size="20" required  placeholder="Пароль" style="padding-left: 15px;"/> </div>
+            <div class = "center "> <p style="margin-bottom: 0px;"><input type="checkbox" checked name="remember"> Запомнить меня</p> </div>
+			<div class = "center "> <p style="margin-bottom: 0px;">Нет аккаунта? <a href="/register" style="text-decoration: none">Зарегистрируйтесь</a></p></div>
 			</form>
+			<div class = "center"> <button class="big-blue-button" style="width: 294px; padding-left: 15px;" onclick="log_in('/api/login')">Войти</button> </div>
         </div>
 {% endblock %}

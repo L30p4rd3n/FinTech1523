@@ -4,10 +4,11 @@
         <div class="content">
 			<form method="post" action="/register">
             <h1 class = "center" style="color: #666666; margin-bottom: 0;">Регистрация</h1>
-            <div class = "center"> <input type="email" class="inputdata" id="email" size="20" required placeholder="Email" name="email" style="padding-left: 15px;"/></div>
-            <div class = "center"> <input type="text" class="inputdata" id="login" size="20" required placeholder="Логин" name="login" style="padding-left: 15px;"/></div>
-            <div class = "center"><input type="password" class="inputdata" id="password" size="20" required  placeholder="Пароль" name="password" style="padding-left: 15px;"/></div>
+            <div class = "center"> <input type="email" class="inputdata login-field" id="email" size="20" required placeholder="Email" name="email" style="padding-left: 15px;"/></div>
+            <div class = "center"> <input type="text" class="inputdata login-field" id="login" size="20" required placeholder="Логин" name="login" style="padding-left: 15px;"/></div>
+            <div class = "center"><input type="password" class="inputdata login-field" id="password" size="20" required  placeholder="Пароль" name="password" style="padding-left: 15px;"/></div>
             <div class = "center"> <p style="margin-bottom: 0px;"><input type="checkbox" checked name="remember"> Запомнить меня</p> </div>
+			<div class = "center "> <p style="margin-bottom: 0px;">Уже есть аккаунт? <a href="/login" style="text-decoration: none;">Войти</a></p></div>
             <div class = "center"> <button class="big-blue-button" type="submit" style="width: 294px; padding-left: 15px;">Зарегестрироваться</button> </div>
 			</form>
         </div>

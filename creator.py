@@ -1,10 +1,13 @@
 from app import app, db, User, Advise, Stocks, AU
 from datetime import date, timedelta
+
+
 def creator():
     with app.app_context():
         db.drop_all()
         db.create_all()
     return "success in creating"
+
 
 advices = [
     "Автоматизируйте сбережения: Настройте автоматические переводы средств на сберегательный счет или инвестиционный счет ежемесячно. Это поможет создать привычку к регулярному сбережению.",
@@ -32,6 +35,7 @@ advices = [
     "Фонды рынка денежных средств: Это инвестиционные продукты, обычно имеющие низкий риск и высокую ликвидность. Они могут быть более стабильными в сравнении с акциями."
 ]
 
+
 def add_data(advice: list):
     k = 0
     for i in range(1, 5):
@@ -42,16 +46,20 @@ def add_data(advice: list):
                 db.session.commit()
             k += 1
     print(f"created {k} advices")
+
+
 creator()
 add_data(advices)
-#for i in range(1, 3):
+
+
+# for i in range(1, 3):
 #    with app.app_context():
 #        s = Stocks(id=i, cdate="06-02-2023", boardid=f'TST{i}', oneprice=i*69)
 #        db.session.add(s)
 #        db.session.commit()
-#a = Advise(id=0, adv_type=4, adv=advices[0])
-#db.session.add(a)
-#db.session.commit()
+# a = Advise(id=0, adv_type=4, adv=advices[0])
+# db.session.add(a)
+# db.session.commit()
 def create_stocks():
     f = open("app/codes.txt")
     x = open("app/names.txt", encoding="utf-8")
@@ -62,7 +70,7 @@ def create_stocks():
         a = f.readline().replace('\n', '')
         b = x.readline().replace('\n', '')
         with app.app_context():
-            ydate = (date.today() - timedelta(days = 1)).strftime('%Y-%m-%d')
+            ydate = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
             s = Stocks(id=i, fname=str(b), ydate=ydate, boardid=str(a), dm1price=0, dm2price=0, dm3price=0, dm4price=0,
                        dm5price=0, dm6price=0, dm7price=0)
             db.session.add(s)
@@ -70,4 +78,6 @@ def create_stocks():
         i += 1
     print(f"created {i} stocks templates")
     return 0
+
+
 create_stocks()

@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 from sqlalchemy.ext.declarative import declarative_base
 import time, apimoex, requests
-#import logging
+
+# import logging
 
 db = SQLAlchemy()
 scheduler = APScheduler()
@@ -20,11 +21,12 @@ scheduler.init_app(app)
 scheduler.start()
 
 login_manager = LoginManager()
-login_manager.login_view = 'auth.log_in'
+login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-#logging.basicConfig()
-#logging.getLogger('apscheduler').setLevel(logging.DEBUG)
+
+# logging.basicConfig()
+# logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 
 class User(UserMixin, db.Model):
@@ -72,6 +74,7 @@ class SU(db.Model):
     sid = db.Column(db.Integer)
     deleted = db.Column(db.Integer)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -89,6 +92,7 @@ app.register_blueprint(api_blueprint)
 @app.errorhandler(404)
 def error404(e):
     return render_template("r404.html")
+
 
 
 @scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0')
@@ -109,7 +113,9 @@ def reload():
                 price = dict_of_data['CLOSE']
                 stock.oneprice = price
                 db.session.commit()
-#scheduler.add_listener(reload)
+
+
+# scheduler.add_listener(reload)
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1')
