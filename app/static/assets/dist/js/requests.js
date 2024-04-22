@@ -28,6 +28,41 @@ async function log_in(url){
 		body: JSON.stringify(what)
 	});
 	if(response.status === 401){
+		var loginButton = document.querySelector('.big-blue-button');
+    var errorMessage = document.getElementById('errorMessage center');
+    loginButton.addEventListener('click', function() {
+        errorMessage.style.display = 'block';
+        setTimeout(function() {
+            errorMessage.style.opacity = '1';
+        }, 100);
+        setTimeout(function() {
+            errorMessage.style.opacity = '0';
+            setTimeout(function() {
+                errorMessage.style.display = 'none';
+            }, 500);
+        }, 2000);
+    });
+	}else{
+		let result = await response.json();
+		window.location.href='/';
+	}
+	
+}
+
+async function register(url){
+	let login = document.getElementById("login").value;
+	let passwd = document.getElementById("password").value;
+	let what = {"login": login,
+				"password": passwd,
+				"remember": 1};
+	let response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8'
+		},
+		body: JSON.stringify(what)
+	});
+	if(response.status === 401){
 		console.log("adasdas"); // код для добавления одной ошибки.
 	}else{
 		let result = await response.json();
@@ -35,6 +70,7 @@ async function log_in(url){
 	}
 	
 }
+
 
 async function deleteUser(url){
 	let what = {"request": "DELETE"}; // actually, could be used in a single func, but 0xplt_ too lazy to implement, cuz backend dev

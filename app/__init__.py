@@ -1,16 +1,24 @@
-from flask import Flask, render_template, abort
+import datetime
+from flask import Flask, render_template, abort, request
 from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 from sqlalchemy.ext.declarative import declarative_base
 import time, apimoex, requests
-
-# import logging
+import logging
 
 db = SQLAlchemy()
 scheduler = APScheduler()
+# filename = f'/var/log/fp/{datetime.date} - fp.log
+filename = f'/Users/nikto/scproj/logs/{datetime.date.today()} - fp.log'
+logging.basicConfig(filename=filename,
+                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s', filemode="w")
+
 
 app = Flask(__name__)
+
+
+
 
 app.config['SECRET_KEY'] = 'aGRjZmRzNDIzMzRmc2QzNDemZnMTIzZGY'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
@@ -93,6 +101,9 @@ app.register_blueprint(api_blueprint)
 def error404(e):
     return render_template("r404.html")
 
+@app.errorhandler(500)
+def e500(e):
+    return {"Error": 500}
 
 
 @scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0')
@@ -116,6 +127,10 @@ def reload():
 
 
 # scheduler.add_listener(reload)
+@scheduler.task('cron', id='reload_log_file', minute='0', hour='0')
+def newlog():
+    logging.basicConfig(filename=filename,
+                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1')

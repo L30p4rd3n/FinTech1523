@@ -12,6 +12,7 @@ auth = Blueprint('auth', __name__)
 @auth.route('/')
 @auth.route('/index')
 def index1():
+    agent_string = request.user_agent.string
     if current_user.is_anonymous:
         login = ''
     else:
