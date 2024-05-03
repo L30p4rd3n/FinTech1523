@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<script>
+async function sendJSON(url){
+	let response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'text/plain;charset=utf8'
+		},
+		body: 2
+	});
+	let result = await response.text();
+
+	//здесь должен быть обработчик исключений!!
+
+	let div = document.createElement('div');
+	div.className = "alert";
+	div.innerHTML = "<p>ъ " + result + "</p>";
+	document.body.append(div);
+} // вынести функцию в отдельный файл с последующим вызовом.
+ </script> 
+ <input type="button" class="is-info is-large is-fullwidth" onclick="sendJSON(url='/game/test')" value="Закончить игру заранее">
+ </body>
+ </html>
+{% endblock %}

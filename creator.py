@@ -1,4 +1,4 @@
-from app import app, db, User, Advise, Stocks, AU
+from app import app, db, User, Advise, Stocks, AU, Gstock
 from datetime import date, timedelta
 
 
@@ -33,7 +33,7 @@ advices = [
     "Инвестиции с низким риском: Рассмотрите вложения в более консервативные инструменты, такие как облигации или облигации с фиксированным доходом, которые обычно менее подвержены рыночным колебаниям.",
 
     "Фонды рынка денежных средств: Это инвестиционные продукты, обычно имеющие низкий риск и высокую ликвидность. Они могут быть более стабильными в сравнении с акциями."
-]
+] # cringe
 
 
 def add_data(advice: list):
@@ -79,5 +79,21 @@ def create_stocks():
     print(f"created {i} stocks templates")
     return 0
 
-
 create_stocks()
+
+def cgs():
+    f = open("app/codes.txt")
+    x = open("app/names.txt", encoding="utf-8")
+    a = f.readline().replace('\n', '')
+    b = x.readline().replace('\n', '')
+    i = 1
+    while a:
+        a = f.readline().replace('\n', '')
+        b = x.readline().replace('\n', '')
+        with app.app_context():
+            ydate = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+            s = Gstock(id=i, fname=str(b), ydate=ydate, boardid=str(a), dm1price=0, dm2price=0, dm3price=0, dm4price=0,
+                       dm5price=0, dm6price=0, dm7price=0)
+            db.session.add(s)
+            db.session.commit()
+        i += 1

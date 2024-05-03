@@ -1,6 +1,6 @@
 import flask
 from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
-from app import db, User, Advise, Stocks, SU
+from app import db, User, Advise, Stocks, SU, UG
 from flask_login import login_required, current_user, logout_user, login_user
 from sqlalchemy import and_
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -60,7 +60,7 @@ def update_us_db():
         if user_before_IDS[i] not in all_selected_IDs:
             con = sqlite3.connect("/instance/hella_db.sqlite")
             cur = con.cursor()
-            take = cur.execute(f"SELECT all FROM SU WHERE uid='{current_user.id}' AND sid='{user_before_IDS[i]}'")
+            take = cur.execute(f"SELECT * FROM SU WHERE uid='{current_user.id}' AND sid='{user_before_IDS[i]}'")
             delete = cur.execute(f"DELETE FROM su WHERE uid='{current_user.id}' AND sid='{user_before_IDS[i]}'")
     for i in range(len(all_selected_IDs)):
         if all_selected_IDs[i] not in user_before_IDS:
@@ -125,6 +125,9 @@ def check_passwd():
 @api.route("/delete_user", methods=["DELETE"])
 def delete_user():
     who = User.query.filter_by(id=current_user.id).first()
+    who_ug = UG.query.filter_by(uid=current_user.id).first()
     db.session.delete(who)
+    db.session.delete(who_ug)
     db.session.commit()
+
     return flask.jsonify({"response": 204})

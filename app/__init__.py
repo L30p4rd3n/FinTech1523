@@ -12,7 +12,7 @@ scheduler = APScheduler()
 # filename = f'/var/log/fp/{datetime.date} - fp.log
 filename = f'/Users/nikto/scproj/logs/{datetime.date.today()} - fp.log'
 logging.basicConfig(filename=filename,
-                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s', filemode="w")
+                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s', filemode="a")
 
 
 app = Flask(__name__)
@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 
 
-app.config['SECRET_KEY'] = 'aGRjZmRzNDIzMzRmc2QzNDemZnMTIzZGY'
+app.config['SECRET_KEY'] = 'change_it_later_dude_like_fr'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
@@ -29,7 +29,7 @@ scheduler.init_app(app)
 scheduler.start()
 
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'auth.login_page'
 login_manager.init_app(app)
 
 
@@ -44,8 +44,6 @@ class User(UserMixin, db.Model):
     login = db.Column(db.String(30))
     # UserAttrib = db.Column(db.Integer)  # could possibly be changed to a list of links??
     new_user = db.Column(db.Integer)
-    is_risky = db.Column(db.Integer)
-    invest = db.Column(db.Integer)
     user_advices = db.Column(db.String(1000))
     # how 'bout making a separate database to take the links from for filling?
 
@@ -70,17 +68,42 @@ class Stocks(db.Model):
     dm7price = db.Column(db.Numeric(scale=3))
 
 
-class AU(db.Model):
+class AU(db.Model): # Advice-User
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     aid = db.Column(db.Integer)
 
 
-class SU(db.Model):
+class SU(db.Model): # Stock-User
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     sid = db.Column(db.Integer)
     deleted = db.Column(db.Integer)
+
+class Gstock(db.Model): # Game-Stock
+    id = db.Column(db.Integer, primary_key=True)
+    bid = db.Column(db.String(4))
+    name = db.Column(db.String(30))
+    date = db.Column(db.String(10))
+    price = db.Column(db.Numeric(scale=3))
+
+class UG(db.Model): # User-Game
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer)
+    day = db.Column(db.Integer)
+    money = db.Column(db.Integer)
+    salary = db.Column(db.Integer)
+    tax = db.Column(db.Numeric(scale=3))
+    risk = db.Column(db.Integer)
+    zeal = db.Column(db.Integer)
+    foresight = db.Column(db.Integer)
+
+
+class UGS(db.Model): # User-GameStock
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer)
+    gsid = db.Column(db.Integer)
+    amount = db.Column(db.Integer)
 
 
 @login_manager.user_loader
@@ -95,6 +118,10 @@ app.register_blueprint(auth_blueprint)
 from app.api import api as api_blueprint
 
 app.register_blueprint(api_blueprint)
+
+from app.dengiest import game as game_blueprint
+
+app.register_blueprint(game_blueprint)
 
 
 @app.errorhandler(404)

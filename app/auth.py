@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 import random
 
-from app import db, User, Advise, Stocks
+from app import db, User, Advise, Stocks, UG
 
 auth = Blueprint('auth', __name__)
 
@@ -26,22 +26,6 @@ def profile():
     is_new = current_user.new_user
     login = current_user.login
     if is_new == 0:
-        if int(current_user.is_risky) > 55:
-            soveti = Advise.query.filter_by(adv_type='1').all()
-            for i in range(3):
-                flash(soveti[i].adv)
-        else:
-            soveti = Advise.query.filter_by(adv_type='2').all()
-            for i in range(3):
-                flash(soveti[i].adv)
-        if int(current_user.invest) > 75:
-            soveti = Advise.query.filter_by(adv_type='3').all()
-            for i in range(3):
-                flash(soveti[i].adv)
-        else:
-            soveti = Advise.query.filter_by(adv_type='4').all()
-            for i in range(3):
-                flash(soveti[i].adv)
         return render_template("profile.html", login=login)
     else:
         return render_template("gamebutt.html", login=login)
@@ -66,12 +50,15 @@ def register():
     if user:
         flash("Данный пользователь уже существует.")
         return redirect(url_for('auth.register'))
-    new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=0,
-                    is_risky=0, invest=0)
+    new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=0)
     db.session.add(new_user)
     db.session.commit()
 
     login_user(new_user)
+
+    ug_profile = UG(uid=current_user.id, day=0, money=0, salary=15000, tax=0.130, risk=0, zeal=0, foresight=0)
+    db.session.add(ug_profile)
+    db.session.commit()
 
     return redirect("/")
 
