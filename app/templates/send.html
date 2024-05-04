@@ -11,16 +11,17 @@ async function sendJSON(url){
 		},
 		body: 2
 	});
-	let result = await response.text();
+	let result = await response.json();
 
 	//здесь должен быть обработчик исключений!!
 
 	let div = document.createElement('div');
 	div.className = "alert";
-	div.innerHTML = "<p>ъ " + result + "</p>";
+	div.innerHTML += "<p>q" + result.text + "</p>";
 	document.body.append(div);
 } // вынести функцию в отдельный файл с последующим вызовом.
  </script> 
+ 
  <input type="button" class="is-info is-large is-fullwidth" onclick="sendJSON(url='/game/test')" value="Закончить игру заранее">
  </body>
  </html>

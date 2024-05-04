@@ -1,5 +1,5 @@
 import flask
-from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
+from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 import random
@@ -51,6 +51,7 @@ def register():
         flash("Данный пользователь уже существует.")
         return redirect(url_for('auth.register'))
     new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=0)
+    current_app.logger.info("%s, %s registered.", email, login)# wow
     db.session.add(new_user)
     db.session.commit()
 

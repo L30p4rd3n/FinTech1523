@@ -18,9 +18,7 @@ logging.basicConfig(filename=filename,
 app = Flask(__name__)
 
 
-
-
-app.config['SECRET_KEY'] = 'change_it_later_dude_like_fr'
+app.config['SECRET_KEY'] = 'RVxF8vZLwxdXVHfimk8YCg'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
