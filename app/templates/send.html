@@ -9,16 +9,22 @@ async function sendJSON(url){
 		headers: {
 			'Content-Type': 'text/plain;charset=utf8'
 		},
-		body: 2
+		body: 6
 	});
-	let result = await response.json();
+	
+	let result = await response.text();
+	
+	let data = {"num": 2,
+				"count": 1};
+	
+	let responsee = await fetch(result, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=utf8'
+		},
+		body: JSON.stringify(data)
+	});
 
-	//здесь должен быть обработчик исключений!!
-
-	let div = document.createElement('div');
-	div.className = "alert";
-	div.innerHTML += "<p>q" + result.text + "</p>";
-	document.body.append(div);
 } // вынести функцию в отдельный файл с последующим вызовом.
  </script> 
  

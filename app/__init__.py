@@ -18,7 +18,7 @@ logging.basicConfig(filename=filename,
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = 'RVxF8vZLwxdXVHfimk8YCg'
+app.config['SECRET_KEY'] = 'nope'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
@@ -80,21 +80,24 @@ class SU(db.Model): # Stock-User
 
 class Gstock(db.Model): # Game-Stock
     id = db.Column(db.Integer, primary_key=True)
-    bid = db.Column(db.String(4))
+    bid = db.Column(db.Integer)
     name = db.Column(db.String(30))
-    date = db.Column(db.String(10))
+    bcode = db.Column(db.String(5))
+    date = db.Column(db.Integer)
     price = db.Column(db.Numeric(scale=3))
+    risk = db.Column(db.Integer)
 
 class UG(db.Model): # User-Game
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     day = db.Column(db.Integer)
-    money = db.Column(db.Integer)
+    money = db.Column(db.Numeric(scale=3))
     salary = db.Column(db.Integer)
     tax = db.Column(db.Numeric(scale=3))
     risk = db.Column(db.Integer)
     zeal = db.Column(db.Integer)
     foresight = db.Column(db.Integer)
+    worked = db.Column(db.Integer)
 
 
 class UGS(db.Model): # User-GameStock

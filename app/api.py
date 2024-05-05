@@ -109,19 +109,6 @@ def change():
         return flask.jsonify({"response": 304})
 
 
-@api.route("/login", methods=["POST"])
-def check_passwd():
-    udata = request.get_json()
-    login = udata["login"]
-    password = udata["password"]
-    remember = udata["remember"]
-    user = User.query.filter_by(login=login).first()
-    if not user or not check_password_hash(user.password, password):
-        abort(401)
-    # login code goes here
-    login_user(user, remember=remember)
-    return {}
-
 @api.route("/delete_user", methods=["DELETE"])
 def delete_user():
     who = User.query.filter_by(id=current_user.id).first()

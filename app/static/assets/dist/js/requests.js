@@ -43,7 +43,6 @@ async function log_in(url){
         }, 2000);
     });
 	}else{
-		let result = await response.json();
 		window.location.href='/';
 	}
 	

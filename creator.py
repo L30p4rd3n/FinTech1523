@@ -4,9 +4,10 @@ from datetime import date, timedelta
 
 def creator():
     with app.app_context():
-        db.drop_all()
+        #db.drop_all()
         db.create_all()
     return "success in creating"
+creator()
 
 
 advices = [
@@ -48,8 +49,8 @@ def add_data(advice: list):
     print(f"created {k} advices")
 
 
-creator()
-add_data(advices)
+#creator()
+#add_data(advices)
 
 
 # for i in range(1, 3):
@@ -79,21 +80,22 @@ def create_stocks():
     print(f"created {i} stocks templates")
     return 0
 
-create_stocks()
+#create_stocks()
 
 def cgs():
-    f = open("app/codes.txt")
-    x = open("app/names.txt", encoding="utf-8")
+
+    f = open("app/gnames.txt", encoding="utf-8")
     a = f.readline().replace('\n', '')
-    b = x.readline().replace('\n', '')
-    i = 1
     while a:
         a = f.readline().replace('\n', '')
-        b = x.readline().replace('\n', '')
-        with app.app_context():
-            ydate = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
-            s = Gstock(id=i, fname=str(b), ydate=ydate, boardid=str(a), dm1price=0, dm2price=0, dm3price=0, dm4price=0,
-                       dm5price=0, dm6price=0, dm7price=0)
-            db.session.add(s)
-            db.session.commit()
-        i += 1
+        b = a.split("|")
+        print(b)
+        for i in range(1, 32):
+            with app.app_context():
+                if(b[-2] == "Рисковая"):
+                    s = Gstock(bid=int(b[0]),name=b[1], bcode=b[2], date=i, price=0.000, risk=1)
+                else:
+                    s = Gstock(bid=int(b[0]), name=b[1], bcode=b[2], date=i, price=0.000, risk=0)
+                db.session.add(s)
+                db.session.commit()
+cgs()
