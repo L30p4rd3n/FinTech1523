@@ -14,7 +14,7 @@ api.register_blueprint(r)
 @r.route('/game', methods=["PATCH"])
 def game_response():
     if current_user.is_anonymous:
-        return abort(403)
+        return abort(400)
     data = request.get_json()
     response = {}
     if list(data.keys())[0] == "risk":

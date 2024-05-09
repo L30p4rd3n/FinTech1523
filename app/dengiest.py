@@ -28,7 +28,7 @@ game = Blueprint("game", __name__, url_prefix="/game")
 
 @game.route('/test')
 def load_vari():
-    return render_template("send.html")
+    return render_template("game.html")
 
 
 @game.route('/test', methods=["get", "post"])
@@ -79,19 +79,24 @@ def vari():
 def new_Day():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
+
     user.money += salary
     user.day += 1  # everything else is on frontend, cuz idgaf and stfu.
+    day += 1
     user.worked = 0
+
+    stocks = [i.price for i in Gstock.query.filter_by(date=day).all()]
     # stock_change()
     db.session.commit()
     # print(f"Сегодня {day} день, а у вас на счёте {money} рублей")
     # print(news_of_the_day[day - 1]) # TODO news_of_the_day сделать через взятие акций за день в stock_change() и фронт
     # todo - проверка на наличие денег(no debt?), а хотя, стоит ли? Или сделать выполнимость 100%?
+
     return {
         "day": day,
-        "money": money
+        "money": money,
+        "stocks": stocks
     }
-
 
 @game.route('/skip', methods=["post"])
 def skip():
@@ -134,6 +139,9 @@ def check_stock():
     for i in range(len(quantities)):
         if quantities[i] != 0:
             response["amounts"].append(quantities[i])
+
+    if response["amounts"] == []:
+        return {}, 204
 
     conn.close()
 

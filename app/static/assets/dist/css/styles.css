@@ -136,11 +136,12 @@ header a {
 	border-color: #666;
 }
 .del_button{
-    background-color: #a73a3a;
+    background-color: #FCC;
     font-family: "Roboto-flex", sans-serif;
     width: 140px;
     height: 60px;
-    border-color: #ff0000;
+    border-color: #F00;
+	border-radius: 12px;
     font-size: 20px;
     display: flex;
     align-items: center;

@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="FinTech project">
-        <meta name="author" content="darkguardian22 and L30p4rd3n">
-        <meta name="generator" content="Jekyll v4.0.1">
-        <title>Таверна.FIN</title>
         <style>
           .panel {
             background-color: #fff;
@@ -46,61 +37,128 @@
             margin-bottom: 5px;
           }
         </style>
-    <link rel="stylesheet" href="/static/assets/dist/css/styles.css">
-    </head>
-    <body class="body-text">
-        <header class="header fixed-top">
-            <a href="/"><img class = "header-img" src="/static/img/FinTech.svg"></a>
-            <h1 class = "header-text" style = "color: #a67400">Таверна.FIN</h1>
-            <h1 class = "header-text" style = "color: #a67400" href="link_to_another_website">Полезные ссылки</h1>
-			<button class="header-enter fixed-right login-button" style = "color: #A67400;">Войти</button> 
-        </header>
-		
-
-        <body class="center" style="padding-top: 150px;">
-            <div class="container">
-              <div class="panel">
-                <h2>Статус</h2>
-                <p id="status"></p>
-              </div>
-              <div class="panel">
-                <h2>Действия</h2>
-                <button class="gamebutton" id="investButton">Инвестировать</button>
-                <button class="gamebutton" onclick="playCasino()">Сыграем в казино</button>
-                <button class="gamebutton" onclick="skipTurn()">Проспать</button>
+{% extends "base.html" %}
+{% block content %}
+        <body class="center" style="padding-top: 32px; padding-bottom: 32px">
+            <div class="container"style="display:flex;">
+              <div class="panel" >
+                <h2>Поле с вводом</h2>
+                <input type="choose" class="input" id="choose" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 20px; margin-left: 10px; weight: 60px;"/>
+                <button class="gamebutton" onclick="send()">Подтвердить</button>
               </div>
             </div>
-          
-            <div class="container">
-              <div class="panel" id="logContainer">
+              <div class="panel" id="logContainer" style = "margin-top: 10px; width: 40px; display:inline-flex;">
                 <h2>Вывод</h2>
                 <ul id="log"></ul>
               </div>
             </div>
-          
-            <script src="game.js"></script>
-          </body>
-        <div class="header downer fixed-end">
-            <div class="paragraphs" style = "justify-content: space-between">
-                <div>
-                    <img class = "image-for-mephi" src="img/mephi.svg">
-					<img src="img/mephi-1.svg">
-                    <h2 style="font-size: 14px">Данный сайт является учебным проектом учеников Лицея 1523</h2>
-                    <h2 style="font-size: 14px">Предуниверситария НИЯУ МИФИ. Спасибо нашим руководителям за </h2>
-                    <h2 style="font-size: 14px">поддержку и участие в нашем образовательном пути!</h2>
-                </div>
-                <div class = "fixed-right">     
-                    <h1 style="font-size: 32px">Авторы</h1>
-                    <div class="author">
-                        <img class="image-for-tg" src="img/telegram.svg">
-                        <span style="font-size: 24px">Андрей Огибин, 10Н</span>
-                    </div>
-                    <div class ="author">
-                        <img class="image-for-tg" src="img/telegram.svg">
-                        <span style="font-size: 24px">Наумов Владимир, 10Н</span>
-                    </div>
-                </div>
+            <div class="container" style = "width: 300px;display:flex;">
+              <div class = "panel" id = "actionContainer">
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">NoName Holdings Ltd. <br /> Цена:</span>
+                    <span class="action-block-price" id = "1">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">Авиалинии "Вперёд <br /> Цена:</span>
+                    <span class="action-block-price" id = "2"> X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">Банк "Новое Время"<br /> Цена:</span>
+                    <span class="action-block-price" id = "3">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">Биржа "КриптоGenius"<br /> Цена:</span>
+                    <span class="action-block-price" id = "4">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">Банк "Толстосум"<br /> Цена:</span>
+                    <span class="action-block-price" id = "5">X</span>
+                  </div>
+              </div>
             </div>
-        </div>
+            <div class="container" style = "width: 160px; display:flex;">
+              <div class = "panel" id = "actionContainer">
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">FinTech NFT GFTNF<br /> Цена:</span>
+                    <span class="action-block-price" id = "6">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">Биржа "Деньги Лопатами"<br /> Цена:</span>
+                    <span class="action-block-price" id = "7">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">ао "Хеопс"<br /> Цена:</span>
+                    <span class="action-block-price" id = "8">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">ао "Электроэнергия" <br /> Цена:</span>
+                    <span class="action-block-price" id = "9">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">FinTech gameHoldings <br /> Цена:</span> 
+                    <span class="action-block-price" id = "10">X</span>
+                  </div>
+              </div>
+            
+          </body>
+        {% endblock %}
+        <script>
+          function every_day(){
+            var xhr = new XMLHttpRequest(); //запрос к бэку
+            xhr.open("GET", "куда" + "что по акциям", true);
+            for (let i = 1; i <= 9; i += 1) {
+                xhr.open("GET", "куда" + "номер акции" + i, true);
+                xhr.onreadystatechange = function () {
+                  var response = xhr.responseText;
+                  changeValueById(response, i);
+                };
+                xhr.send();
+        
+            }
+            xhr.onreadystatechange = function () {
+            var response = xhr.responseText;
+          }
+          var requestButton = document.getElementById('requestButton');
+          var actionBlock = document.getElementById('actionBlock');
+          requestButton.addEventListener('click', function() {
+              fetch('/api/getFlag')
+                  .then(response => response.json())
+                  .then(data => { 
+                      var id = data.id;
+                      if (id === 'someId') {
+                          actionBlock.classList.add('true');
+                      } else {
+                          actionBlock.classList.remove('true');
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Произошла ошибка:', error);
+                  });
+          });
+          function changeValueById(request, id) {
+              let value = request; 
+              let element = document.getElementById(id);
+              if(element) {
+                  element.value = value;
+              }
+          }
+          function send() {
+            var number = document.getElementById('choose').value;
+            var xhr = new XMLHttpRequest(); //запрос к бэку
+            xhr.open("GET", "куда" + number, true);
+            xhr.onreadystatechange = function () {
+            var response = xhr.responseText;
+            log(response);
+             };
+            xhr.send();
+        }
+          function log(message) {
+            let logElement = document.getElementById('log');
+            let listItem = document.createElement('li');
+            listItem.textContent = message;
+            logElement.appendChild(listItem);
+          }
+
+      </script>
     </body>
     </html>
