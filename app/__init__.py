@@ -6,11 +6,13 @@ from flask_apscheduler import APScheduler
 from sqlalchemy.ext.declarative import declarative_base
 import time, apimoex, requests
 import logging
+from os import environ
 
 db = SQLAlchemy()
 scheduler = APScheduler()
 # filename = f'/var/log/fp/{datetime.date} - fp.log
-filename = f'/Users/nikto/scproj/logs/{datetime.date.today()} - fp.log'
+
+filename = f'{environ["VIRTUAL_ENV"]}/../logs/{datetime.date.today()} - fp.log'
 logging.basicConfig(filename=filename,
                     level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s', filemode="a")
 

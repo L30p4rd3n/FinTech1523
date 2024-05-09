@@ -7,6 +7,7 @@ import flask
 from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, current_app
 from app import db, User, Advise, Stocks, SU, UG, UGS, Gstock
 from flask_login import login_required, current_user, logout_user, login_user
+from os import environ
 
 game = Blueprint("game", __name__, url_prefix="/game")
 
@@ -123,7 +124,7 @@ def check_stock():
     prices = []
     gsids = [i.gsid for i in user_stocks]
 
-    conn = sqlite3.connect("C:/Users/nikto/scproj/instance/hella_db.sqlite")
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
 
     c = conn.cursor()
@@ -162,7 +163,7 @@ def buy():
         current_app.logger.error("Invalid data in function %s: %s, %s", "buy", num, cnt)
         return "", 400
 
-    conn = sqlite3.connect("C:/Users/nikto/scproj/instance/hella_db.sqlite")  # that sucks
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
     c = conn.cursor()
     c.execute(f"SELECT * FROM Gstock WHERE date={day} AND bid={num}")
@@ -219,7 +220,7 @@ def sell():  # TODO - снова, запрос на check(), потом сюда
         current_app.logger.error("Invalid data in function %s: %s, %s", "sell", num, cnt)
         return "", 400
 
-    conn = sqlite3.connect("C:/Users/nikto/scproj/instance/hella_db.sqlite")  # that sucks
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
     c = conn.cursor()
     c.execute(f"SELECT * FROM Gstock WHERE date={day} AND bid={num}")

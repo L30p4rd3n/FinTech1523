@@ -9,28 +9,13 @@
     background-color: #ffd573;
     height: 80px;
     position: relative; /* убираем фиксированную позицию */
-    z-index: 1; /* устанавливаем z-index, чтобы контент не наслаивался на шапку */
+	top: 1;
 }
-.downer{
-    height: 164px;
-}
-.fixed-end {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
-.fixed-top {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-}
-/* Стили для заголовка */
+
 .header-text {
     font-size: 18px;
     align-items: center;
-    padding: 20px;
+    padding: 28px;
     font-weight: 600;
     font-family: "Roboto-flex", sans-serif;
 }
@@ -62,11 +47,31 @@ header a {
     color: #a67400;
 }
 
-/* Стили для контента */
-.content {
-    margin-top: 100px; /* добавлен верхний отступ, равный высоте шапки */
-    margin-left: 20px; /* добавлен левый отступ */
+body{
+	position: relative;
+	margin: 0;
+  /* Растягиваем body по высоте html */
+	min-height: 100vh;
 }
+main {
+	padding-bottom: 192px;
+	padding-top: 14px;
+	padding-left: 28px;
+	padding-right: 28px;
+}
+.fixed-end {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
 
 /* Стили для абзацев */
 .paragraphs {
@@ -156,8 +161,12 @@ header a {
     height: 20px;
 }
 .fixed-right {
-    position: fixed;
-    right: 20px;
+    position: absolute;
+    right: 28px;
+}
+.fixed-left {
+	position: absolute;
+	left: 28px;
 }
 .center {
     display: flex;
@@ -165,6 +174,18 @@ header a {
 }
 .body-text {
 	font-family: "Roboto-flex", sans-serif;
+}
+
+
+footer {
+  display:flex;
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 164px;
+  background-color: #ffd573;
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 
 .footer-text{
