@@ -98,4 +98,10 @@ def cgs():
                     s = Gstock(bid=int(b[0]), name=b[1], bcode=b[2], date=i, price=0.000, risk=0)
                 db.session.add(s)
                 db.session.commit()
-cgs()
+def change_name():
+    with app.app_context():
+        need = Gstock.query.filter_by(name='Биржа "Деньги Лопатами"').all()
+        for i in range(len(need)):
+            need[i].name = 'Биржа "Качество, а не Время"'
+        db.session.commit()
+#change_name()

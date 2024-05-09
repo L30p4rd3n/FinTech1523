@@ -49,7 +49,6 @@ for j in range(10):
         #else:
         #    s += float(format((int(random.random() // 0.001 % 1000) / 1000), '.3f'))
             c[j].append(s)
-# TODO - коэффициент и работа с ним, надо как-то разнообразить это всё.
 for i in range(10):
     for j in range(31):
         c[i][j] = float(format(c[i][j], ".3f"))
@@ -62,11 +61,11 @@ def add_risky(bid):
         for i in range(31):
             a[i].price = c[bid - 1][i]
         db.session.commit()
-add_risky(1)
-add_risky(3)
-add_risky(4)
-add_risky(6)
-add_risky(8)
+#(1)
+###add_risky(3)
+#add_risky(4)
+#add_risky(6)
+#add_risky(8)
 #add_stable(2)
 #add_stable(5)
 #add_stable(7)

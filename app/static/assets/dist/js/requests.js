@@ -83,3 +83,102 @@ async function deleteUser(url){
 	let result = await response.json();
 	window.location.href='/';
 }
+
+var endpoint = "";
+var money = 0, salary=0, day=1, opt=0;
+var result = {};
+
+async function getOptionURL(url){
+	opt = document.getElementById("chooseOption").value;
+	let response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'text/plain;charset=utf8'
+		},
+		body: opt
+	});
+	if(response.status == 200){
+		endpoint = await response.text();
+	}else if(response.status == 204){
+		console.log("уже поработал");
+	}else{
+		console.log(response.status);
+	}
+}
+
+async function sendData(url){
+	let num = document.getElementById("d1").value;
+	let count = document.getElementById("d2").value;
+	let data = {
+		"num": num,
+		"count": count		
+	};
+	let response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=utf8'
+		},
+		body: JSON.stringify(data)
+	});
+	if(response.status == 200){
+		
+			let opt = document.getElementById("chooseOption").value;
+			udata();
+			await sleep(100);
+			if (opt == 1){
+				result = await response.json();
+				if (result.success == 1){
+					log("Вы усердно поработали за сверхурочные; Вам решили повысить зарплату до" + result.salary);
+				}else{
+					log("Вы усердно поработали за сверхурочные");
+				}
+			}else if(opt == 2){
+				result = await response.json();
+				log("Ваши акции:");
+				for(var i = 0; i < result.names.length; i++){
+					log("Акции компании " + result.names[i] + " в количестве " + result.amounts[i] + " на цену " + result.prices[i]);
+				}
+			}
+		
+	}else if(response.status == 204){
+		console.log("no data");
+	}else{
+		console.log(response.status);
+	}
+}
+
+window.addEventListener('load', () => {
+	udata();
+	});
+async function udata(){
+			var url = '/game/g';
+			await sleep(10);
+			let response = await fetch(url, {method: "POST"});
+			let result = await response.json();
+			for(let i = 1; i <= 10; i++){
+				document.getElementById(i).innerText=result.stocks[i-1];
+			}
+			salary=result.salary;
+			day=result.day;
+			money=result.money;
+			let logElement = document.getElementById('log');
+			logElement.innerHTML = '';
+			log("Текущий баланс: " + money); log("Текущая зарплата: " + salary); log("Текущий день: " + day); 
+	}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function log(message) {
+        let logElement = document.getElementById('log');
+        let listItem = document.createElement('li');
+        listItem.textContent = message;
+        logElement.appendChild(listItem);
+        }
+		
+function defineEndpoint(){
+	if(opt == 1){
+		sendData();
+		
+	}
+}

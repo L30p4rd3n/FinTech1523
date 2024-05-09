@@ -49,10 +49,10 @@ def vari():
     v = request.get_data()
     if (v == b'1'):
         zeal += 1
-        if not user.worked:
-            return "/game/skip"
-        else:
+        if user.worked:
             return " ", 204
+        else:
+            return "/game/skip"
     elif (v == b'2'):
         return "/game/check"
     elif (v == b'3'):
@@ -75,18 +75,28 @@ def vari():
         return " ", 400
 
 
+@game.route("/g", methods=["POST"])
+def give_info():
+    user = UG.query.filter_by(uid=current_user.id).first()
+    day, money, salary = user.day, user.money, user.salary
+    stocks = [i.price for i in Gstock.query.filter_by(date=day).all()]
+    return {
+        "day": day,
+        "money": money,
+        "salary": salary,
+        "stocks": stocks
+    }
 
 @game.route("/next", methods=["POST"])
 def new_Day():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
 
-    user.money += salary
+    user.money += decimal.Decimal(salary)
     user.day += 1  # everything else is on frontend, cuz idgaf and stfu.
     day += 1
     user.worked = 0
 
-    stocks = [i.price for i in Gstock.query.filter_by(date=day).all()]
     # stock_change()
     db.session.commit()
     # print(f"Сегодня {day} день, а у вас на счёте {money} рублей")
@@ -96,7 +106,6 @@ def new_Day():
     return {
         "day": day,
         "money": money,
-        "stocks": stocks
     }
 
 @game.route('/skip', methods=["post"])
@@ -121,8 +130,10 @@ def check_stock():
     user = UG.query.filter_by(uid=current_user.id).first()
     user_stocks = UGS.query.filter_by(uid=current_user.id).all()
     quantities = [i.amount for i in user_stocks]
+
     prices = []
     gsids = [i.gsid for i in user_stocks]
+    names = []
 
     conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
@@ -132,9 +143,11 @@ def check_stock():
         c.execute(f"SELECT * FROM Gstock WHERE date={user.day} AND bid={gsids[i]}")
         res = c.fetchone()
         if quantities[i]:
-            prices.append(res[-2])
+            prices.append(float(format(res[-2] * quantities[i], '.3f')))
+            names.append(res[-5])
 
-    response = {"amounts":[],
+    response = {"names":names,
+                "amounts":[],
                 "prices":prices}
 
     for i in range(len(quantities)):

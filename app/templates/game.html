@@ -1,4 +1,6 @@
-        <style>
+        <script src="/static/assets/dist/js/requests.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<style>
           .panel {
             background-color: #fff;
             border-radius: 8px;
@@ -6,6 +8,9 @@
             padding: 20px;
             margin: 10px;
             min-width: 250px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
           }
           .gamebutton {
             padding: 10px 20px;
@@ -41,11 +46,16 @@
 {% extends "base.html" %}
 {% block content %}
         <main class="center">
-            <div class="container center" style="display:inline-flex; height">
+            <div class="container center" style="display:inline-flex;">
               <div class="panel">
                 <h2>Поле с вводом</h2>
-                <input type="choose" class="input" id="choose" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 20px; margin-left: 10px; weight: 60px;"/>
-                <button class="gamebutton" onclick="send()">Подтвердить</button>
+				<h5 style="color: #999; margin-bottom: 5px;"> Опция </h5>
+                <input type="choose" class="input" id="chooseOption" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px;"/>
+                <button class="gamebutton" onclick="getOptionURL('/game/test')"> Подтвердить </button> <!--поменять на /game-->
+				<h5 style="color: #999; margin-bottom: 5px; margin-top: 0px;"> Данные </h5>
+				<input type="choose" id="d1" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 70px;"/>
+				<input type="choose" id="d2" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px; margin-top: 15px;"/>
+                <button class="gamebutton" onclick="sendData(endpoint);"> Отправить данные </button> <!--поменять на /game-->
               </div>
             </div>
 			<div class="container" style="display:inline-flex;">
@@ -57,23 +67,23 @@
             <div class="container center" style = "display:inline-flex;">
               <div class = "panel" id = "actionContainer">
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">NoName Holdings Ltd. <br /> Цена:</span>
+                    <span class="action-block-name">1) - NoName Holdings Ltd. <br /> Цена:</span>
                     <span class="action-block-price" id = "1">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">Авиалинии "Вперёд <br /> Цена:</span>
+                    <span class="action-block-name">2) - Авиалинии "Вперёд" <br /> Цена:</span>
                     <span class="action-block-price" id = "2"> X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">Банк "Новое Время"<br /> Цена:</span>
+                    <span class="action-block-name">3) - Банк "Новое Время"<br /> Цена:</span>
                     <span class="action-block-price" id = "3">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">Биржа "КриптоGenius"<br /> Цена:</span>
+                    <span class="action-block-name">4) - Биржа "КриптоGenius"<br /> Цена:</span>
                     <span class="action-block-price" id = "4">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">Банк "Толстосум"<br /> Цена:</span>
+                    <span class="action-block-name">5) - Банк "Гарант"<br /> Цена:</span>
                     <span class="action-block-price" id = "5">X</span>
                   </div>
               </div>
@@ -81,23 +91,23 @@
             <div class="container" style = "display:inline-flex;">
               <div class = "panel" id = "actionContainer">
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">FinTech NFT GFTNF<br /> Цена:</span>
+                    <span class="action-block-name">6) - FinTech NFT<br /> Цена:</span>
                     <span class="action-block-price" id = "6">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">Биржа "Деньги Лопатами"<br /> Цена:</span>
+                    <span class="action-block-name">7) - Биржа "Качество, а не Время"<br /> Цена:</span>
                     <span class="action-block-price" id = "7">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">ао "Хеопс"<br /> Цена:</span>
+                    <span class="action-block-name">8) - ао "Хеопс"<br /> Цена:</span>
                     <span class="action-block-price" id = "8">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">ао "Электроэнергия" <br /> Цена:</span>
+                    <span class="action-block-name">9) - ао "Электроэнергия" <br /> Цена:</span>
                     <span class="action-block-price" id = "9">X</span>
                   </div>
                   <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">FinTech gameHoldings <br /> Цена:</span> 
+                    <span class="action-block-name">10) - FinTech gameHoldings <br /> Цена:</span> 
                     <span class="action-block-price" id = "10">X</span>
                   </div>
               </div>
@@ -105,6 +115,7 @@
           </main>
         {% endblock %}
         <script>
+		
           function every_day(){
             var xhr = new XMLHttpRequest(); //запрос к бэку
             xhr.open("GET", "куда" + "что по акциям", true);

@@ -9,7 +9,7 @@
     background-color: #ffd573;
     height: 80px;
     position: relative; /* убираем фиксированную позицию */
-	top: 1;
+	top: 0px;
 }
 
 .header-text {

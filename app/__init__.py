@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, render_template, abort, request
+from flask import Flask, render_template, abort, request, send_from_directory
 from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
@@ -20,7 +20,7 @@ logging.basicConfig(filename=filename,
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = 'asda'
+app.config['SECRET_KEY'] = 'RVxF8vZLwxdXVHfimk8YCg'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
@@ -161,6 +161,12 @@ def reload():
 def newlog():
     logging.basicConfig(filename=filename,
                     level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
+@app.route('/favicon.ico')
+def favicon():
+    import os
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1')
