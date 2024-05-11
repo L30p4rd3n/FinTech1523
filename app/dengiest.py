@@ -1,12 +1,10 @@
 import decimal
 import random
 import sqlite3
-import time
 from app.poker import play
-import flask
-from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, current_app
-from app import db, User, Advise, Stocks, SU, UG, UGS, Gstock
-from flask_login import login_required, current_user, logout_user, login_user
+from flask import render_template, request, Blueprint, current_app
+from app import db, UG, UGS, Gstock
+from flask_login import current_user
 from os import environ
 
 game = Blueprint("game", __name__, url_prefix="/game")
@@ -36,41 +34,28 @@ def load_vari():
 def vari():
     user = UG.query.filter_by(uid=current_user.id).first()
     zeal, foresight, risky = user.zeal, user.foresight, user.risk
-    money, tax, salary = user.money, user.tax, user.salary
-
-    # print("Как насчет поработать еще пару часиков? За целых 1,5 зарплаты? Введи 1!")
-    # print("Посмотреть свои акции? Введи 2!")
-    # print("Инвестировать? Введи 3!")
-    # print("Продашь акции? Введи 4!")
-    # print("Сыграем? Введи 5!")
-
-    # должно быть в меню, которое видно на ВСЕХ устройствах
 
     v = request.get_data()
-    if (v == b'1'):
-        zeal += 1
-        if user.worked:
-            return " ", 204
-        else:
-            return "/game/skip"
-    elif (v == b'2'):
+    if v == b'1':
+        if not user.worked:
+            user.zeal += 1
+            db.session.commit()
+        return "/game/skip"
+    elif v == b'2':
         return "/game/check"
-    elif (v == b'3'):
+    elif v == b'3':
         foresight += 1
         return "/game/buy"
-    elif (v == b'4'):
+    elif v == b'4':
         return "/game/sell"
-    elif (v == b'5'):
-        risky += 1
-        print("Давай сыграем в покер")
-        print("Сколько хочешь поставить?")
-        stavka = int(input())
-        if (play()):
-            money += stavka
-        else:
-            money -= stavka
-    elif v == b'6':
+    elif v == b'5':
         return "/game/next"
+    elif v == b'6':
+        risky += 1
+        return "/game/rps"
+    elif v == b'7':
+        risky += 1
+        return "/game/poker"
     else:
         return " ", 400
 
@@ -87,42 +72,43 @@ def give_info():
         "stocks": stocks
     }
 
+
 @game.route("/next", methods=["POST"])
-def new_Day():
+def new_day():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
 
     user.money += decimal.Decimal(salary)
-    user.day += 1  # everything else is on frontend, cuz idgaf and stfu.
+    user.day += 1
     day += 1
     user.worked = 0
 
-    # stock_change()
     db.session.commit()
-    # print(f"Сегодня {day} день, а у вас на счёте {money} рублей")
-    # print(news_of_the_day[day - 1]) # TODO news_of_the_day сделать через взятие акций за день в stock_change() и фронт
-    # todo - проверка на наличие денег(no debt?), а хотя, стоит ли? Или сделать выполнимость 100%?
-
     return {
         "day": day,
         "money": money,
     }
 
+
 @game.route('/skip', methods=["post"])
 def skip():
     user = UG.query.filter_by(uid=current_user.id).first()
-    user.worked = 1
+
     day, money, salary = user.day, user.money, user.salary
     user.money += decimal.Decimal(salary * 1.5)
-    db.session.commit()
-    if (random.random() > 0.7):  # and day > 10):
+
+    result = {"success": 0,
+              "salary": user.salary}
+
+    if random.random() > 0.7 and user.worked != 1:
         user.salary *= 1.5
-        db.session.commit()
-        return {"success": 1,
-                "salary": user.salary}
-    else:
-        return {"success": 0,
-                "salary": salary}
+        user.worked = 1
+        result["success"] = 1
+    elif user.worked == 1:
+        return "", 200
+
+    db.session.commit()
+    return result
 
 
 @game.route('/check', methods=["POST"])
@@ -136,7 +122,7 @@ def check_stock():
     names = []
 
     conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
-    # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
+    # conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/var/app-instance/hella_db.sqlite')
 
     c = conn.cursor()
     for i in range(len(gsids)):
@@ -146,15 +132,15 @@ def check_stock():
             prices.append(float(format(res[-2] * quantities[i], '.3f')))
             names.append(res[-5])
 
-    response = {"names":names,
-                "amounts":[],
-                "prices":prices}
+    response = {"names": names,
+                "amounts": [],
+                "prices": prices}
 
     for i in range(len(quantities)):
         if quantities[i] != 0:
             response["amounts"].append(quantities[i])
 
-    if response["amounts"] == []:
+    if not response["amounts"]:
         return {}, 204
 
     conn.close()
@@ -162,8 +148,7 @@ def check_stock():
     return response, 200
 
 
-
-@game.route('/buy', methods=["POST"]) # TODO POST -> PUT
+@game.route('/buy', methods=["POST"])  # TODO POST -> PUT
 # TODO ВАЖНО - ПРИ ВЫЗОВЕ buy() !!!НА ФРОНТЕ!!! ВЫЗВАТЬ check(), А ЗАТЕМ buy()
 def buy():
     user = UG.query.filter_by(uid=current_user.id).first()
@@ -213,27 +198,20 @@ def buy():
     return "", 200
 
 
-@game.route("/sell", methods=["POST"]) # TODO POST -> PATCH/DELETE
+@game.route("/sell", methods=["POST"])  # TODO POST -> PATCH/DELETE
 def sell():  # TODO - снова, запрос на check(), потом сюда
     user = UG.query.filter_by(uid=current_user.id).first()
-    user_stocks = UGS.query.filter_by(uid=current_user.id).all()
-    global money
-    number = 1
-    # for i in user_stocks:
-    #    print(number, " | ", "|".join(i))
-    # print("-" * 20)
-    # print("Введите номер акции которую хотите продать")
-    # num = int(input())
     day = user.day
     __data__ = request.get_json()
     num, cnt = __data__["num"], __data__["count"]  # num - id акции, cnt - кол-во
+
     try:
         num, cnt = int(num), int(cnt)
     except ValueError:
         current_app.logger.error("Invalid data in function %s: %s, %s", "sell", num, cnt)
         return "", 400
 
-    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
     c = conn.cursor()
     c.execute(f"SELECT * FROM Gstock WHERE date={day} AND bid={num}")
@@ -276,29 +254,72 @@ def sell():  # TODO - снова, запрос на check(), потом сюда
     return "", 200
 
 
+@game.route("/rps", methods=["POST"])
 def rock_paper_scissors_game():
-    global money
-    # print("Введите ставку") - дело фронта.
-    bet = 0
-    user_choice = input('Введите ваш выбор (Камень, Ножницы, Бумага): ')
-    choices = ['Камень', 'Ножницы', 'Бумага']
+    user = UG.query.filter_by(uid=current_user.id).first()
+    data = request.get_json()
 
-    # Random Bot Choice
-    bot_choice = random.choice(choices)
+    user_choice, user_bet = data["num"], data["count"]
 
-    # Game Logic
+    try:
+        user_choice, user_bet = int(data["num"]), float(data["count"])
+        if user_choice > 3:
+            return "", 400
+        if user_bet < 0 or user_bet > user.money:
+            return "", 400
+    except ValueError:
+        current_app.logger.error("Invalid data in function %s: %s, %s", "rps", user_choice, user_bet)
+        return "", 400
 
-    # 1 - Победа игрока; 2 - победа бота, 3 - ничья
+    bot_choice = random.choice([1, 2, 3])  # rock, paper, scissors == 1, 2, 3
 
     if user_choice == bot_choice:
-        return 3
-    elif (user_choice == 'Камень' and bot_choice == 'Ножницы') or (
-            user_choice == 'Ножницы' and bot_choice == 'Бумага') or (
-            user_choice == 'Бумага' and bot_choice == 'Камень'):
-        return f'Вы выиграли! Вы выбрали {user_choice}, бот выбрал {bot_choice}'
+        user.money -= decimal.Decimal(user_bet)
+        db.session.commit()
+        return {
+            "user": user_choice,
+            "bot": bot_choice,
+            "won": 0
+        }
+    elif (user_choice == 1 and bot_choice == 2) or (
+            user_choice == 2 and bot_choice == 3) or (
+            user_choice == 3 and bot_choice == 1):
+        user.money += decimal.Decimal(user_bet)
+        db.session.commit()
+        return {
+            "user": user_choice,
+            "bot": bot_choice,
+            "won": 1
+        }
     else:
-        return f'Вы проиграли! Бот выбрал {bot_choice}, вы выбрали {user_choice}'
+        user.money -= decimal.Decimal(user_bet)
+        db.session.commit()
+        return {
+            "user": user_choice,
+            "bot": bot_choice,
+            "won": 0
+        }
+
 
 # while (day < 31):
 #    new_Day()
-#### вынести на фронт этот while
+# вынести на фронт этот while
+
+@game.route("/poker", methods=["POST"])
+def poker():
+    user = UG.query.filter_by(uid=current_user.id).first()
+    # print("Давай сыграем в покер")
+    # print("Сколько хочешь поставить?")
+    user_bet = request.get_data()
+    try:
+        user_bet = int(user_bet)
+    except ValueError:
+        current_app.logger.error("Invalid data in function %s: %s", "poker", user_bet)
+        return "", 400
+    data = play()
+    if data["playerwon"]:
+        user.money += user_bet
+    else:
+        user.money -= user_bet
+    db.session.commit()
+    return dict(data)

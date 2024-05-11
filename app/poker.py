@@ -89,6 +89,7 @@ class PokerHand:
             return "Нет комбинации"
 
 
+
 def determine_winner(player_hand, bot_hand, table_hand):
     player_combination = player_hand.determine_hand(table_hand)
     bot_combination = bot_hand.determine_hand(table_hand)
@@ -142,23 +143,23 @@ for _ in range(5):
     table_hand.append(deck.deal())
 
 def play():
-    print("Карты игрока:")
-    print(player_hand)
-    print("Комбинация игрока:", player_hand.determine_hand(table_hand))
-    print("\nКарты бота:")
-    print(bot_hand)
-    print("Комбинация бота:", bot_hand.determine_hand(table_hand))
 
-    print("\nКарты на столе:")
-    print(", ".join(str(card) for card in table_hand))
+    player_hand.determine_hand(table_hand)
+    bot_hand.determine_hand(table_hand)
 
-    # Определяем победителя
+    ", ".join(str(card) for card in table_hand)
+
     result = determine_winner(player_hand, bot_hand, table_hand)
-    print("\nРезультат:")
-    print(result)
 
-    bot_combination = bot_hand.determine_hand(table_hand)
-    if (result == "Бот победил!"):
-        return False
-    else:
-        return True
+
+    return {
+        "player" : player_hand.__str__(),
+        "bot" : bot_hand.__str__(),
+        "table" : ", ".join(str(card) for card in table_hand),
+        "playerwon" : 1
+    } if result == "Бот победил!" else {
+        "player": player_hand.__str__(),
+        "bot": bot_hand.__str__(),
+        "table": ", ".join(str(card) for card in table_hand),
+        "playerwon": 0
+    }
