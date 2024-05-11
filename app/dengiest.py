@@ -277,9 +277,9 @@ def rock_paper_scissors_game():
         user.money -= decimal.Decimal(user_bet)
         db.session.commit()
         return {
-            "user": user_choice,
+            "player": user_choice,
             "bot": bot_choice,
-            "won": 0
+            "playerwon": 0
         }
     elif (user_choice == 1 and bot_choice == 2) or (
             user_choice == 2 and bot_choice == 3) or (
@@ -287,17 +287,17 @@ def rock_paper_scissors_game():
         user.money += decimal.Decimal(user_bet)
         db.session.commit()
         return {
-            "user": user_choice,
+            "player": user_choice,
             "bot": bot_choice,
-            "won": 1
+            "playerwon": 1
         }
     else:
         user.money -= decimal.Decimal(user_bet)
         db.session.commit()
         return {
-            "user": user_choice,
+            "player": user_choice,
             "bot": bot_choice,
-            "won": 0
+            "playerwon": 0
         }
 
 

@@ -133,28 +133,44 @@ async function showFields() {
 }
 
 async function sendData(url){
-	let num = document.getElementById("d1").value;
-	let count = document.getElementById("d2").value;
-	let data = {
+	var response = "";
+	if(opt == 3 || opt == 4 || opt == 6){
+		var num = document.getElementById("d1").value;
+		var count = document.getElementById("d2").value;
+		let data = {
 		"num": num,
 		"count": count		
-	};
-	let response = await fetch(url, {
+		};
+		response = await fetch(url, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json;charset=utf8'
 		},
 		body: JSON.stringify(data)
 	});
+	}else if(opt == 7){
+		var count = document.getElementById("d2").value;
+		response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'text/plain;charset=utf8'
+			},
+			body: count
+		});
+	}
+	else{
+		response = await fetch(url, {
+		method: 'POST',
+		});
+	}
+	
 	if(response.status == 200){
-		
-			let opt = document.getElementById("chooseOption").value;
 			udata();
 			await sleep(100);
 			if (opt == 1){
 				result = await response.json();
 				if (result.success == 1){
-					log("Вы усердно поработали за сверхурочные; Вам решили повысить зарплату до" + result.salary);
+					log("Вы усердно поработали за сверхурочные; Вам решили повысить зарплату до " + result.salary);
 				}else{
 					log("Вы усердно поработали за сверхурочные");
 				}
@@ -164,10 +180,23 @@ async function sendData(url){
 				for(var i = 0; i < result.names.length; i++){
 					log("Акции компании " + result.names[i] + " в количестве " + result.amounts[i] + " на цену " + result.prices[i]);
 				}
+			}else if(opt == 3){
+				log("Вы купили акции компании с id " + num + " в количестве " + count);
+			}else if(opt == 4){
+				log("Вы продали акции компании с id " + num + " в количестве " + count);
+			}else if(opt == 6 || opt == 7){
+				result = await response.json();
+				log("Ваше значение:" + result.player);
+				log("Значение дилера:" + result.bot);
+				if(result.playerwon){
+					log("Вы победили и получили " + count);
+				}else{
+					log("Вы проиграли и потеряли " + count);
+				}
 			}
 		
 	}else if(response.status == 204){
-		console.log("no data");
+		console.log(204);
 	}else{
 		console.log(response.status);
 	}
