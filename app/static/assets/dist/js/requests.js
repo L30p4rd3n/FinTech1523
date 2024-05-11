@@ -47,13 +47,13 @@ async function log_in(url){
 	}
 	
 }
-
 async function register(url){
+	let email = document.getElementById("email").value;
 	let login = document.getElementById("login").value;
 	let passwd = document.getElementById("password").value;
 	let what = {"login": login,
-				"password": passwd,
-				"remember": 1};
+				"email": email,
+				"password": passwd};
 	let response = await fetch(url, {
 		method: 'POST',
 		headers: {
@@ -61,13 +61,9 @@ async function register(url){
 		},
 		body: JSON.stringify(what)
 	});
-	if(response.status === 401){
-		console.log("adasdas"); // код для добавления одной ошибки.
-	}else{
-		let result = await response.json();
+	if(response.ok){
 		window.location.href='/';
 	}
-	
 }
 
 
@@ -104,6 +100,36 @@ async function getOptionURL(url){
 	}else{
 		console.log(response.status);
 	}
+}
+
+async function showFields() {
+    var d1 = document.getElementById('d1');
+    var d2 = document.getElementById('d2');
+	d1.placeholder = '';
+	d2.placeholder = '';
+	
+    if (opt == 3 || opt == 4) {
+		d1.style.display = '';
+		d2.style.display = '';
+		d1.placeholder = 'Номер акции';
+		d2.placeholder = 'Количество';
+    }else if (opt == 6) {
+		d1.style.display = '';
+		d2.style.display = '';
+		d1.placeholder = '1-3 Камень-бумага';
+		d2.placeholder = 'Ставка';
+    }else if (opt == 7) {
+		d1.style.display = 'block';
+		d2.style.display = 'none';
+		d1.placeholder = 'Ставка';
+		d2.style.placeholder = '';
+    }
+	else {
+		d1.style.display = 'none';
+		d2.style.display = 'none';
+		d1.style.placeholder = '';
+		d2.style.placeholder = '';
+    }
 }
 
 async function sendData(url){
@@ -147,9 +173,6 @@ async function sendData(url){
 	}
 }
 
-window.addEventListener('load', () => {
-	udata();
-	});
 async function udata(){
 			var url = '/game/g';
 			await sleep(10);

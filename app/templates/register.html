@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<script src="/static/assets/dist/js/requests.js"></script>
         <div class="content">
 			<form method="post" action="/register">
             <h1 class = "center" style="color: #666666; margin-bottom: 0;">Регистрация</h1>
@@ -8,8 +9,9 @@
             <div class = "center"> <input type="text" class="inputdata login-field" id="login" size="20" required placeholder="Логин" name="login" style="padding-left: 15px;"/></div>
             <div class = "center"><input type="password" class="inputdata login-field" id="password" size="20" required  placeholder="Пароль" name="password" style="padding-left: 15px;"/></div>
             <div class = "center"> <p style="margin-bottom: 0px;"><input type="checkbox" checked name="remember"> Запомнить меня</p> </div>
-			<div class = "center "> <p style="margin-bottom: 0px;">Уже есть аккаунт? <a href="/login" style="text-decoration: none;">Войти</a></p></div>
-            <div class = "center"> <button class="big-blue-button" type="submit" style="width: 294px; padding-left: 15px;">Зарегестрироваться</button> </div>
+			<div class = "center"> <p style="margin-bottom: 0px;">Уже есть аккаунт? <a href="/login" style="text-decoration: none;">Войти</a></p></div>
+			</form>
+            <div class = "center"> <button class="big-blue-button" style="width: 294px; padding-left: 15px;" onclick="register('/register/r')">Зарегестрироваться</button> </div>
 			</form>
         </div>
 {% endblock %}

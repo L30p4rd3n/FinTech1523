@@ -20,7 +20,7 @@ logging.basicConfig(filename=filename,
 app = Flask(__name__)
 
 
-app.config['SECRET_KEY'] = 'no'
+app.config['SECRET_KEY'] = 'chipi'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
@@ -38,14 +38,12 @@ login_manager.init_app(app)
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.String(64))
     login = db.Column(db.String(30))
-    # UserAttrib = db.Column(db.Integer)  # could possibly be changed to a list of links??
     new_user = db.Column(db.Integer)
     user_advices = db.Column(db.String(1000))
-    # how 'bout making a separate database to take the links from for filling?
 
 
 class Advise(db.Model):
@@ -136,7 +134,7 @@ def e500(e):
     return {"Error": 500}
 
 
-@scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0')
+@scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0') # useless just now
 def reload():
     for i in range(1, 13):
         with scheduler.app.app_context():
@@ -147,7 +145,7 @@ def reload():
                 time.sleep(0.250)
                 print(data)
             if len(data) == 0:
-                print("NOOOOOOONEEEEEEE")
+                print("none")
                 continue
             else:
                 dict_of_data = data[0]

@@ -28,7 +28,7 @@ def profile():
     if is_new == 0:
         return render_template("profile.html", login=login)
     else:
-        return render_template("gamebutt.html", login=login)
+        return redirect("/game/test")
 
 
 @auth.route('/register')
@@ -36,21 +36,23 @@ def register_page():
     return render_template('register.html')
 
 
-@auth.route('/register', methods=["GET", 'POST'])
+@auth.route('/register/r', methods=['POST'])
 def register():
-    email = request.form.get('email')
-    login = request.form.get('login')
-    password = request.form.get('password')
-    if password == '' or login == '' or password == '':
-        flash("Остались незаполненные поля. Просим отправить данные заново, заполнив все поля")  # ебнуть js и REST?
+    udata = request.get_json()
+    print(udata)
+    email = udata["email"]
+    login = udata["login"]
+    password = udata["password"]
 
-        return redirect("/register")
+    #SSTI?
+
     user = User.query.filter_by(email=email).first()
-
     if user:
-        flash("Данный пользователь уже существует.")
-        return redirect(url_for('auth.register'))
-    new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=0)
+        return "", 400
+        #return redirect(url_for('auth.register'))
+
+    new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=1)
+
     current_app.logger.info("%s, %s registered.", email, login)  # wow
     db.session.add(new_user)
     db.session.commit()
