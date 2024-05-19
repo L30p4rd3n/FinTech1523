@@ -1,6 +1,0 @@
-[Unit]
-Description=Gunicorn instance to serve app
-After=network.target
-[Service]
-User=ktoto
-Group=lefttech

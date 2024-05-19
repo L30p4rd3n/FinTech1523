@@ -97,7 +97,12 @@ async function getOptionURL(url){
 		endpoint = await response.text();
 	}else if(response.status == 204){
 		console.log("уже поработал");
-	}else{
+	}else if (response.status == 202){
+		log("Игра окончена. Спасибо за потраченное на нее время! Через 10 секунд вас автоматически переместит на главную страницу, где будут выведены советы по улучшению финансового профиля.");
+		await sleep(10000);
+		window.location.href='/'
+	}
+	else{
 		console.log(response.status);
 	}
 }
@@ -197,13 +202,16 @@ async function sendData(url){
 		
 	}else if(response.status == 204){
 		console.log(204);
+	}else if(response.status == 202){
+		log("Игра окончена. Спасибо за потраченное на нее время!\n Через 10 секунд вас автоматически переместит на главую\n страницу, где будут выведены советы.");
+		await sleep(10000);
+		window.location.href='/'
 	}else{
-		console.log(response.status);
+		console.log(response.status)
 	}
 }
-
 async function udata(){
-			var url = '/game/g';
+			var url = '/api/game/g';
 			await sleep(10);
 			let response = await fetch(url, {method: "POST"});
 			let result = await response.json();

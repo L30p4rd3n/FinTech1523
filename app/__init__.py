@@ -1,9 +1,8 @@
 import datetime
-from flask import Flask, render_template, abort, request, send_from_directory
+from flask import Flask, render_template, send_from_directory
 from flask_login import LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
-from sqlalchemy.ext.declarative import declarative_base
 import time, apimoex, requests
 import logging
 from os import environ
@@ -14,13 +13,12 @@ scheduler = APScheduler()
 
 filename = f'{environ["VIRTUAL_ENV"]}/../logs/{datetime.date.today()} - fp.log'
 logging.basicConfig(filename=filename,
-                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s', filemode="a")
-
+                    level=logging.ERROR, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s',
+                    filemode="a")
 
 app = Flask(__name__)
 
-
-app.config['SECRET_KEY'] = 'a'
+app.config['SECRET_KEY'] = ''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)
@@ -66,19 +64,20 @@ class Stocks(db.Model):
     dm7price = db.Column(db.Numeric(scale=3))
 
 
-class AU(db.Model): # Advice-User
+class AU(db.Model):  # Advice-User
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     aid = db.Column(db.Integer)
 
 
-class SU(db.Model): # Stock-User
+class SU(db.Model):  # Stock-User
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     sid = db.Column(db.Integer)
     deleted = db.Column(db.Integer)
 
-class Gstock(db.Model): # Game-Stock
+
+class Gstock(db.Model):  # Game-Stock
     id = db.Column(db.Integer, primary_key=True)
     bid = db.Column(db.Integer)
     name = db.Column(db.String(30))
@@ -87,7 +86,8 @@ class Gstock(db.Model): # Game-Stock
     price = db.Column(db.Numeric(scale=3))
     risk = db.Column(db.Integer)
 
-class UG(db.Model): # User-Game
+
+class UG(db.Model):  # User-Game
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     day = db.Column(db.Integer)
@@ -100,7 +100,7 @@ class UG(db.Model): # User-Game
     worked = db.Column(db.Integer)
 
 
-class UGS(db.Model): # User-GameStock
+class UGS(db.Model):  # User-GameStock
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
     gsid = db.Column(db.Integer)
@@ -120,21 +120,22 @@ from app.api import api as api_blueprint
 
 app.register_blueprint(api_blueprint)
 
-from app.dengiest import game as game_blueprint
+from app.game import game as game_blueprint
 
 app.register_blueprint(game_blueprint)
 
 
 @app.errorhandler(404)
 def error404(e):
-    return render_template("r404.html")
+    return render_template("r404.html"), 404
+
 
 @app.errorhandler(500)
 def e500(e):
     return {"Error": 500}
 
 
-@scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0') # useless just now
+@scheduler.task('cron', id='flask_stock_reload', minute='0', hour='0')  # useless just now
 def reload():
     for i in range(1, 13):
         with scheduler.app.app_context():
@@ -158,13 +159,15 @@ def reload():
 @scheduler.task('cron', id='reload_log_file', minute='0', hour='0')
 def newlog():
     logging.basicConfig(filename=filename,
-                    level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+                        level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
 
 @app.route('/favicon.ico')
 def favicon():
     import os
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1')

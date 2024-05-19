@@ -102,7 +102,7 @@ def test_page():
 def game_page():
     if current_user.new_user == 0:
         return redirect('/profile')
-    return render_template('game.html', login=current_user.login)
+    return redirect("/api/game")
 
 
 # def login():
@@ -115,6 +115,7 @@ def logout():
     return redirect(url_for('auth.index1'))
 
 
-@auth.route('/send')
-def viewapi():
-    return render_template("send.html")
+#@auth.route('/send')
+#def viewapi():
+#    return render_template("send.html")
+# - removed because test

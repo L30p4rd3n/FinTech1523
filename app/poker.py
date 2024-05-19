@@ -144,8 +144,8 @@ for _ in range(5):
 
 def play():
 
-    player_hand.determine_hand(table_hand)
-    bot_hand.determine_hand(table_hand)
+    a = player_hand.determine_hand(table_hand)
+    b = bot_hand.determine_hand(table_hand)
 
     ", ".join(str(card) for card in table_hand)
 
