@@ -1,5 +1,4 @@
-
-		<script src="/static/assets/dist/js/requests.js"></script>
+        <script src="/static/assets/dist/js/requests.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script>
 		window.addEventListener('load', () => {
@@ -13,10 +12,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin: 10px;
-            min-width: 250px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 345px;
           }
           .gamebutton {
             padding: 10px 20px;
@@ -47,10 +47,73 @@
           #log li {
             margin-bottom: 5px;
           }
-		  
+          .panel{
+            width: 200px;
+          }
         </style>
 {% extends "base.html" %}
 {% block content %}
+
+<div class="container" style = "display:inline-flex; height: 400px;">
+  <div class="panel" style="width: 400px;">
+    <h2>Доступные действия:</h2>
+    <a>Введите 1, чтобы поработать за сверхурочные</a>
+    <a>Введите 2, чтобы посмотреть список своих акций</a>
+    <a>Введите 3, чтобы купить акции из списка справа</a>
+    <a>Введите 4, чтобы продать свои акции</a>
+    <a>Введите 5, чтобы перейти к следующему дню</a>
+    <a>Введите 6, чтобысыграть в камень-ножницы-бумагу</a>
+	<a>(1-К, 2-Н, 3-Б)</a>
+    <a>Введите 7, чтобы сыграть в покер</a>
+</div>
+  <div class="container center" style = "display:inline-flex; display: table-cell; height: 400px;">
+    <div class = "panel" id = "actionContainer" style = "width: 20px;">
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">1) - NoName Holdings Ltd. <br /> Цена:</span>
+          <span class="action-block-price" id = "1">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">2) - Авиалинии "Вперёд" <br /> Цена:</span>
+          <span class="action-block-price" id = "2"> X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">3) - Банк "Новое Время"<br /> Цена:</span>
+          <span class="action-block-price" id = "3">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">4) - Биржа "КриптоGenius"<br /> Цена:</span>
+          <span class="action-block-price" id = "4">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">5) - Банк "Гарант"<br /> Цена:</span>
+          <span class="action-block-price" id = "5">X</span>
+        </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class = "panel" id = "actionContainer" style = "width: 20px; height: 345px;">
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">6) - FinTech NFT<br /> Цена:</span>
+          <span class="action-block-price" id = "6">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">7) - Биржа "Качество, а не Время"<br /> Цена:</span>
+          <span class="action-block-price" id = "7">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">8) - ао "Хеопс"<br /> Цена:</span>
+          <span class="action-block-price" id = "8">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">9) - ао "Электроэнергия" <br /> Цена:</span>
+          <span class="action-block-price" id = "9">X</span>
+        </div>
+        <div class="action-block" id="actionBlock">
+          <span class="action-block-name">10) - FinTech gameHoldings <br /> Цена:</span> 
+          <span class="action-block-price" id = "10">X</span>
+        </div>
+    </div>  
+</div>
         <main class="center">
             <div class="container center" style="display:inline-flex;">
               <div class="panel">
@@ -59,8 +122,8 @@
                 <input type="choose" class="input" id="chooseOption" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px;"/>
                 <button class="gamebutton" onclick="getOptionURL('/game'); showFields();"> Подтвердить </button> <!--поменять на /game-->
 				<h5 style="color: #999; margin-bottom: 5px; margin-top: 0px;"> Данные </h5>
-				<input type="choose" id="d1" size="20" required placeholder="" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 70px; display:none;">
-				<input type="choose" id="d2" size="20" required placeholder="" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px; margin-top: 15px; display:none;">
+				<input type="choose" id="d1" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 70px; display: none;"/>
+				<input type="choose" id="d2" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px; margin-top: 15px; display: none;"/>
                 <button class="gamebutton" onclick="sendData(endpoint);"> Отправить данные </button> <!--поменять на /game-->
               </div>
             </div>
@@ -70,54 +133,17 @@
                 <ul id="log"></ul>
               </div>
             </div>
-            <div class="container center" style = "display:inline-flex;">
-              <div class = "panel" id = "actionContainer">
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">1) - NoName Holdings Ltd. <br /> Цена:</span>
-                    <span class="action-block-price" id = "1">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">2) - Авиалинии "Вперёд" <br /> Цена:</span>
-                    <span class="action-block-price" id = "2"> X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">3) - Банк "Новое Время"<br /> Цена:</span>
-                    <span class="action-block-price" id = "3">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">4) - Биржа "КриптоGenius"<br /> Цена:</span>
-                    <span class="action-block-price" id = "4">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">5) - Банк "Гарант"<br /> Цена:</span>
-                    <span class="action-block-price" id = "5">X</span>
-                  </div>
-              </div>
-            </div>
-            <div class="container" style = "display:inline-flex;">
-              <div class = "panel" id = "actionContainer">
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">6) - FinTech NFT<br /> Цена:</span>
-                    <span class="action-block-price" id = "6">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">7) - Биржа "Качество, а не Время"<br /> Цена:</span>
-                    <span class="action-block-price" id = "7">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">8) - ао "Хеопс"<br /> Цена:</span>
-                    <span class="action-block-price" id = "8">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">9) - ао "Электроэнергия" <br /> Цена:</span>
-                    <span class="action-block-price" id = "9">X</span>
-                  </div>
-                  <div class="action-block" id="actionBlock">
-                    <span class="action-block-name">10) - FinTech gameHoldings <br /> Цена:</span> 
-                    <span class="action-block-price" id = "10">X</span>
-                  </div>
-              </div>
-            
+              <script>
+                window.addEventListener('wheel', function(e) {
+                      if (e.deltaY < 0) {
+                          // Прокрутка вверх
+                          window.scrollBy(0, -25);
+                      } else {
+                          // Прокрутка вниз
+                          window.scrollBy(0, 25);
+                      }
+                  });
+              </script>
           </main>
         {% endblock %}
     </body>

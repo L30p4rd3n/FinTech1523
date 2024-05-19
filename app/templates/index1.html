@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script src="/static/assets/dist/js/requests.js"></script>
+<link rel="stylesheet" href="/static/assets/dist/css/styles.css">
+        <div class="content">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading"><span class="text-muted">Ваши советы готовы</span></h2>
+                    <p class="lead">Вы успешно прошли игру для определения вашего финансового профиля.</p>
+                    <p class="lead">Нажмите кнопку для получения советов</p>
+                </div>
+            </div>
+      
+            <hr class="featurette-divider">
+            <button id="addAdviceButton" onclick="getadv();">Добавить советы</button>
+            <div class="" id="adviceContainer"></div>
+        </div>
+    </body>
+    {% endblock %}

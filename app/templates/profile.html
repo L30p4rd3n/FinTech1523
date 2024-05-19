@@ -16,7 +16,8 @@
                 <input type="new_password" class = "inputdata" id = "new_password" size ="20" required placeholder= "Новый пароль" style="padding-left: 15px; margin-right: 10px;"/>
                 <button class="soxr" id = "update" onclick="updatePassword('/api/passwd_change');">Обновить</button>
             </div>
-            <div class = "center"><button id="del_button" class = "center del_button" style = "color: #ff0000;">Удалить аккаунт</button></div>
+            <div class = "center" ><button id="del_button" class = "center del_button" style = "color: #ff0000;margin-right: 5px">Удалить аккаунт</button>
+			<button id="exit" class = "center del_button" style = "color: #333;" onclick="window.location.href='/logout';">Выйти из аккаунта</button></div>
 			<p id="deleteWarning" style="display: none; color: red;">Вы уверены, что хотите удалить аккаунт?</p>
         </div>
         

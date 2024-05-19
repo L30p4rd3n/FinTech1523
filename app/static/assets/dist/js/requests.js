@@ -27,8 +27,8 @@ async function log_in(url){
 		},
 		body: JSON.stringify(what)
 	});
-	if(response.status === 401){
-		var loginButton = document.querySelector('.big-blue-button');
+	 if(response.status === 401){
+  var loginButton = document.querySelector('.big-blue-button');
     var errorMessage = document.getElementById('errorMessage center');
     loginButton.addEventListener('click', function() {
         errorMessage.style.display = 'block';
@@ -61,6 +61,22 @@ async function register(url){
 		},
 		body: JSON.stringify(what)
 	});
+	if(response.status === 400){
+	var loginButton = document.querySelector('.big-blue-button');
+    var errorMessage = document.getElementById('errorMessage center');
+    loginButton.addEventListener('click', function() {
+        errorMessage.style.display = 'block';
+        setTimeout(function() {
+            errorMessage.style.opacity = '1';
+        }, 100);
+        setTimeout(function() {
+            errorMessage.style.opacity = '0';
+            setTimeout(function() {
+                errorMessage.style.display = 'none';
+            }, 500);
+        }, 2000);
+    });
+	}
 	if(response.ok){
 		window.location.href='/';
 	}
@@ -154,7 +170,7 @@ async function sendData(url){
 		body: JSON.stringify(data)
 	});
 	}else if(opt == 7){
-		var count = document.getElementById("d2").value;
+		var count = document.getElementById("d1").value;
 		response = await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -175,8 +191,12 @@ async function sendData(url){
 			if (opt == 1){
 				result = await response.json();
 				if (result.success == 1){
+					udata();
+				await sleep(20);
 					log("Вы усердно поработали за сверхурочные; Вам решили повысить зарплату до " + result.salary);
 				}else{
+					udata();
+				await sleep(20);
 					log("Вы усердно поработали за сверхурочные");
 				}
 			}else if(opt == 2){
@@ -186,9 +206,15 @@ async function sendData(url){
 					log("Акции компании " + result.names[i] + " в количестве " + result.amounts[i] + " на цену " + result.prices[i]);
 				}
 			}else if(opt == 3){
+				udata();
+				await sleep(20);
 				log("Вы купили акции компании с id " + num + " в количестве " + count);
+				
 			}else if(opt == 4){
+				udata();
+				await sleep(20);
 				log("Вы продали акции компании с id " + num + " в количестве " + count);
+				
 			}else if(opt == 6 || opt == 7){
 				result = await response.json();
 				log("Ваше значение:" + result.player);
@@ -211,7 +237,7 @@ async function sendData(url){
 	}
 }
 async function udata(){
-			var url = '/api/game/g';
+			var url = '/api/g/u';
 			await sleep(10);
 			let response = await fetch(url, {method: "POST"});
 			let result = await response.json();
@@ -236,9 +262,28 @@ function log(message) {
         logElement.appendChild(listItem);
         }
 		
-function defineEndpoint(){
-	if(opt == 1){
-		sendData();
-		
+async function getadv(){
+	let url = "/getadv";
+	let response = await fetch(url, {method: 'POST'});
+	let data = await response.json();
+	if(data.msg.length == 0){
+		document.getElementById("adviceContainer").innerHTML = '<p class = "lead">Ваши советы еще не готовы. Повторим через 5 секунд...</p>';
+		await sleep(5000);
+		window.location.href="/";
+	}else{
+		let where = document.getElementById('adviceContainer');
+		where.innerHTML = '';
+		await sleep(15);
+		for(let i = 0; i < 5; i++){
+			let what = document.createElement('p');
+			what.style.cssText = `
+				font-size: 18px;
+				line-height: 1.5;
+				color: #666;
+			`;
+			document.getElementById("feet").style.width = "99vw";
+			what.textContent = data.msg[i];
+			where.appendChild(what);
+		}
 	}
 }

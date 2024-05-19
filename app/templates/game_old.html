@@ -1,0 +1,124 @@
+
+		<script src="/static/assets/dist/js/requests.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+		window.addEventListener('load', () => {
+		udata();
+		});
+		</script>
+		<style>
+          .panel {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            min-width: 250px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+          }
+          .gamebutton {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+          }
+          #logContainer {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px 10px;
+            width: calc(100% - 40px);
+          }
+
+          #log {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+          }
+
+          #log li {
+            margin-bottom: 5px;
+          }
+		  
+        </style>
+{% extends "base.html" %}
+{% block content %}
+        <main class="center">
+            <div class="container center" style="display:inline-flex;">
+              <div class="panel">
+                <h2>Поле с вводом</h2>
+				<h5 style="color: #999; margin-bottom: 5px;"> Опция </h5>
+                <input type="choose" class="input" id="chooseOption" size="20" required placeholder="Выбор" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px;"/>
+                <button class="gamebutton" onclick="getOptionURL('/game'); showFields();"> Подтвердить </button> <!--поменять на /game-->
+				<h5 style="color: #999; margin-bottom: 5px; margin-top: 0px;"> Данные </h5>
+				<input type="choose" id="d1" size="20" required placeholder="" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 70px; display:none;">
+				<input type="choose" id="d2" size="20" required placeholder="" style="padding-left: 15px; margin-bottom: 1px; margin-left: 10px; weight: 60px; margin-top: 15px; display:none;">
+                <button class="gamebutton" onclick="sendData(endpoint);"> Отправить данные </button> <!--поменять на /game-->
+              </div>
+            </div>
+			<div class="container" style="display:inline-flex;">
+              <div class="panel" id="logContainer" style = "margin-top: 10px; width: 40px; display:inline-flex;">
+                <h2>Вывод</h2>
+                <ul id="log"></ul>
+              </div>
+            </div>
+            <div class="container center" style = "display:inline-flex;">
+              <div class = "panel" id = "actionContainer">
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">1) - NoName Holdings Ltd. <br /> Цена:</span>
+                    <span class="action-block-price" id = "1">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">2) - Авиалинии "Вперёд" <br /> Цена:</span>
+                    <span class="action-block-price" id = "2"> X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">3) - Банк "Новое Время"<br /> Цена:</span>
+                    <span class="action-block-price" id = "3">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">4) - Биржа "КриптоGenius"<br /> Цена:</span>
+                    <span class="action-block-price" id = "4">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">5) - Банк "Гарант"<br /> Цена:</span>
+                    <span class="action-block-price" id = "5">X</span>
+                  </div>
+              </div>
+            </div>
+            <div class="container" style = "display:inline-flex;">
+              <div class = "panel" id = "actionContainer">
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">6) - FinTech NFT<br /> Цена:</span>
+                    <span class="action-block-price" id = "6">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">7) - Биржа "Качество, а не Время"<br /> Цена:</span>
+                    <span class="action-block-price" id = "7">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">8) - ао "Хеопс"<br /> Цена:</span>
+                    <span class="action-block-price" id = "8">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">9) - ао "Электроэнергия" <br /> Цена:</span>
+                    <span class="action-block-price" id = "9">X</span>
+                  </div>
+                  <div class="action-block" id="actionBlock">
+                    <span class="action-block-name">10) - FinTech gameHoldings <br /> Цена:</span> 
+                    <span class="action-block-price" id = "10">X</span>
+                  </div>
+              </div>
+            
+          </main>
+        {% endblock %}
+    </body>
+    </html>

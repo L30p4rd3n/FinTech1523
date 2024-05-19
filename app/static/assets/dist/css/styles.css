@@ -194,3 +194,45 @@ footer {
 	font-size: 12px;
 	font-weight: 600;
 }
+
+.content{
+	padding: 20px;	
+}
+
+.featurette-divider {
+    margin: 40px 0;
+}
+
+/* Стили для разделов с описанием */
+.featurette-heading {
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.lead {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #666;
+}
+
+/* Стили для кнопки добавления совета */
+#addAdviceButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+#addAdviceButton:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для контейнера с советами */
+#adviceContainer {
+    margin-top: 20px;
+}

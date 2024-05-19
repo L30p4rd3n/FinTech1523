@@ -46,8 +46,8 @@ class User(UserMixin, db.Model):
 
 class Advise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    adv_type = db.Column(db.Integer)
     adv = db.Column(db.String(1000))
+    uid = db.Column(db.Integer)
 
 
 class Stocks(db.Model):
@@ -62,12 +62,6 @@ class Stocks(db.Model):
     dm5price = db.Column(db.Numeric(scale=3))
     dm6price = db.Column(db.Numeric(scale=3))
     dm7price = db.Column(db.Numeric(scale=3))
-
-
-class AU(db.Model):  # Advice-User
-    id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer)
-    aid = db.Column(db.Integer)
 
 
 class SU(db.Model):  # Stock-User
@@ -105,6 +99,11 @@ class UGS(db.Model):  # User-GameStock
     uid = db.Column(db.Integer)
     gsid = db.Column(db.Integer)
     amount = db.Column(db.Integer)
+
+class bcreds(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cr1 = db.Column(db.String(75))
+    cr2 = db.Column(db.String(75))
 
 
 @login_manager.user_loader

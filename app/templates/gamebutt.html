@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+		<link rel="stylesheet" href="/static/assets/dist/css/styles.css">
+        <script src="/static/assets/dist/js/requests.js"></script>
+        <div class="content">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading"><span class="text-muted">Чтобы определить ваш профиль, пройдите недолгую игру!</span></h2>
+                    <p class="lead">Суть игры состоит в том, чтобы попытаться заработать как можно больше разными средствами</p>
+					<p class="lead">Для этого у Вас будет 31 игровой день</p>
+					<p class="lead">Если Вы проиграете или выиграете, шанса переиграть не будет.</p>
+					<p class="lead">Желаем удачи и мудрых решений!</p>
+                </div>
+            </div>
+            <button class = 'big-blue-button' id="iwanttoplay" onclick='window.location.href="/game/"'>Нажмите, чтобы приступить!</button>
+        </div>
+    </body>
+    {% endblock %}

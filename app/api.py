@@ -5,18 +5,19 @@ import random
 import flask
 from flask import render_template, request, Blueprint, current_app
 from app import db, User, UG, Gstock, UGS
-from flask_login import current_user, logout_user
+from flask_login import current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 from app.poker import play
 
 api = Blueprint('api', __name__, url_prefix='/api')
-game = Blueprint('game', __name__, url_prefix="/game")
-api.register_blueprint(game)
+g = Blueprint('g', __name__, url_prefix="/g")
+api.register_blueprint(g)
 
 
 @api.route('/passwd_change', methods=["PATCH"])
+@login_required
 def change():
     passwds = request.get_json()
     old_pass = passwds["old"]
@@ -34,6 +35,7 @@ def change():
 
 
 @api.route("/delete_user", methods=["DELETE"])
+@login_required
 def delete_user():
     who = User.query.filter_by(id=current_user.id).first()
     who_ug = UG.query.filter_by(uid=current_user.id).first()
@@ -43,7 +45,8 @@ def delete_user():
 
     return flask.jsonify({"response": 204})
 
-@game.route("/g", methods=["POST"])
+@g.route("/u", methods=["POST"])
+@login_required
 def give_info():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
@@ -56,7 +59,8 @@ def give_info():
     }
 
 
-@game.route("/next", methods=["POST"])
+@g.route("/next", methods=["POST"])
+@login_required
 def new_day():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
@@ -65,6 +69,8 @@ def new_day():
         user.money += decimal.Decimal(salary)
         user.day += 1
         day += 1
+        user.money -= decimal.Decimal(user.money // 100 * (1 - user.tax))
+        user.tax *= decimal.Decimal(1.01)
         user.worked = 0
 
         db.session.commit()
@@ -76,7 +82,8 @@ def new_day():
         return "Game Over", 202
 
 
-@game.route('/skip', methods=["post"])
+@g.route('/skip', methods=["post"])
+@login_required
 def skip():
     user = UG.query.filter_by(uid=current_user.id).first()
 
@@ -97,7 +104,8 @@ def skip():
     return result
 
 
-@game.route('/check', methods=["POST"])
+@g.route('/check', methods=["POST"])
+@login_required
 def check_stock():
     user = UG.query.filter_by(uid=current_user.id).first()
     user_stocks = UGS.query.filter_by(uid=current_user.id).all()
@@ -134,8 +142,8 @@ def check_stock():
     return response, 200
 
 
-@game.route('/buy', methods=["POST"])  # TODO POST -> PUT
-# TODO ВАЖНО - ПРИ ВЫЗОВЕ buy() !!!НА ФРОНТЕ!!! ВЫЗВАТЬ check(), А ЗАТЕМ buy()
+@g.route('/buy', methods=["POST"])
+@login_required
 def buy():
     user = UG.query.filter_by(uid=current_user.id).first()
     day = user.day
@@ -146,7 +154,6 @@ def buy():
     except ValueError:
         current_app.logger.error("Invalid data in function %s: %s, %s", "buy", num, cnt)
         return "", 400
-
     conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
     # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
     c = conn.cursor()
@@ -160,6 +167,8 @@ def buy():
     except ValueError:
         return "", 400
     try:
+        if num in [1, 4, 6, 8, 3]:
+            user.risk += 3
         res = c.execute(f"SELECT * FROM UGS WHERE gsid={a[1]} AND uid={current_user.id}")
         if res.fetchone() is None:
             bstock = UGS(uid=current_user.id, gsid=a[1], amount=cnt)
@@ -184,8 +193,9 @@ def buy():
     return "", 200
 
 
-@game.route("/sell", methods=["POST"])  # TODO POST -> PATCH/DELETE
-def sell():  # TODO - снова, запрос на check(), потом сюда
+@g.route("/sell", methods=["POST"])
+@login_required
+def sell():
     user = UG.query.filter_by(uid=current_user.id).first()
     day = user.day
     __data__ = request.get_json()
@@ -240,7 +250,8 @@ def sell():  # TODO - снова, запрос на check(), потом сюда
     return "", 200
 
 
-@game.route("/rps", methods=["POST"])
+@g.route("/rps", methods=["POST"])
+@login_required
 def rock_paper_scissors_game():
     user = UG.query.filter_by(uid=current_user.id).first()
     data = request.get_json()
@@ -291,7 +302,8 @@ def rock_paper_scissors_game():
 #    new_Day()
 # вынести на фронт этот while
 
-@game.route("/poker", methods=["POST"])
+@g.route("/poker", methods=["POST"])
+@login_required
 def poker():
     user = UG.query.filter_by(uid=current_user.id).first()
     # print("Давай сыграем в покер")

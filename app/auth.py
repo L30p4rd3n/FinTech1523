@@ -1,10 +1,10 @@
 import flask
-from flask import render_template, request, redirect, url_for, flash, Blueprint, abort, current_app
+from flask import render_template, request, redirect, url_for, Blueprint, abort, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 import random
 
-from app import db, User, Advise, Stocks, UG, UGS
+from app import db, User, Advise, UG
 
 auth = Blueprint('auth', __name__)
 
@@ -12,23 +12,31 @@ auth = Blueprint('auth', __name__)
 @auth.route('/')
 @auth.route('/index')
 def index1():
-    agent_string = request.user_agent.string
     if current_user.is_anonymous:
-        login = ''
+        return render_template("index.html", login='')
     else:
         login = current_user.login
-    return render_template('index.html', login=login)
+        if current_user.new_user == 0:
+            return render_template('index1.html', login=login) # прошел игру, советы
+        elif current_user.new_user == 2:
+            return render_template('index2.html', login=login)  # недопрошел игру
+    return render_template('index.html', login=login) # не прошел игру
 
+@auth.route('/getadv', methods=["post"])
+@login_required
+def getadv():
+    advices = []
+    try:
+        advices = [i.adv for i in Advise.query.filter_by(uid=current_user.id).all()]
+    except TypeError:
+        advices = []
+    return {"msg": advices}, 200
 
 @auth.route('/profile')
 @login_required
 def profile():
-    is_new = current_user.new_user
     login = current_user.login
-    if is_new == 0:
-        return render_template("profile.html", login=login)
-    else:
-        return redirect("/game/test")
+    return render_template("profile.html", login=login)
 
 
 @auth.route('/register')
@@ -39,17 +47,14 @@ def register_page():
 @auth.route('/register/r', methods=['POST'])
 def register():
     udata = request.get_json()
-    print(udata)
     email = udata["email"]
     login = udata["login"]
     password = udata["password"]
 
-    #SSTI?
-
     user = User.query.filter_by(email=email).first()
-    if user:
+    _user = User.query.filter_by(login=login).first()
+    if user or _user:
         return "", 400
-        #return redirect(url_for('auth.register'))
 
     new_user = User(email=email, login=login, password=generate_password_hash(password), new_user=1)
 
@@ -59,7 +64,7 @@ def register():
 
     login_user(new_user)
 
-    ug_profile = UG(uid=current_user.id, day=1, money=0, salary=15000, tax=0.130, risk=0, zeal=0, foresight=0, worked=0)
+    ug_profile = UG(uid=current_user.id, day=1, money=5, salary=15000, tax=0.185, risk=0, zeal=0, foresight=0, worked=0)
     db.session.add(ug_profile)
     db.session.commit()
 
@@ -90,21 +95,10 @@ def check_passwd():
         db.session.commit()
 
     return "", 200
-
-
-@auth.route('/test')
-def test_page():
-    return render_template('test.html')
-
-
-@auth.route('/game')
+@auth.route("/gamebutt")
 @login_required
-def game_page():
-    if current_user.new_user == 0:
-        return redirect('/profile')
-    return redirect("/api/game")
-
-
+def gamebuttheh():
+    return render_template("gamebutt.html")
 # def login():
 #  return render_template('test.html')
 
