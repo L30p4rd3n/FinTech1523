@@ -100,6 +100,18 @@ var endpoint = "";
 var money = 0, salary=0, day=1, opt=0;
 var result = {};
 
+async function loadadv(){
+	let response = await fetch("/game/genadv", {method: "POST"});
+
+  	if (response.status == 502) {
+    		await loadadv();
+  	}else if (response.status != 200) {
+    	console.log(response.statusText);
+  	}else{
+		window.location.href='/';
+	}
+}
+
 async function getOptionURL(url){
 	opt = document.getElementById("chooseOption").value;
 	let response = await fetch(url, {
@@ -114,9 +126,19 @@ async function getOptionURL(url){
 	}else if(response.status == 204){
 		console.log("уже поработал");
 	}else if (response.status == 202){
-		log("Игра окончена. Спасибо за потраченное на нее время! Через 10 секунд вас автоматически переместит на главную страницу, где будут выведены советы по улучшению финансового профиля.");
-		await sleep(10000);
-		window.location.href='/'
+		
+		log("Игра окончена. Спасибо за потраченное на нее время!\n Как только советы будут загружены, вас автоматически переместит на главую страницу, где будут выведены советы.\n");
+		log("Не уходите со страницы до автоматического перемещения! Это может сломать процесс загрузки советов, отчего вам придется создавать новый аккаунт!");
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://fp.lefthub.ru/game/genadv');
+		xhr.send();
+		xhr.timeout = 25000;
+		xhr.onload = function() {
+		  if (xhr.status == 200) { 
+		    console.log(200);
+			window.location.href='/'
+		  }
+		};		
 	}
 	else{
 		console.log(response.status);
@@ -228,10 +250,19 @@ async function sendData(url){
 		
 	}else if(response.status == 204){
 		console.log(204);
-	}else if(response.status == 202){
-		log("Игра окончена. Спасибо за потраченное на нее время!\n Через 10 секунд вас автоматически переместит на главую\n страницу, где будут выведены советы.");
-		await sleep(10000);
-		window.location.href='/'
+	}else if (response.status == 202){
+		
+		log("Игра окончена. Спасибо за потраченное на нее время!\n Как только советы будут загружены, вас автоматически переместит на главую страницу, где будут выведены советы.\n");
+		log("Не уходите со страницы до автоматического перемещения! Это может сломать процесс загрузки советов, отчего вам придется создавать новый аккаунт!");
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', 'https://fp.lefthub.ru/game/genadv');
+		xhr.send();
+		xhr.timeout = 25000;
+		xhr.onload = function() {
+		  if (xhr.status == 200) { 
+		    console.log(200);
+		  }
+		};		
 	}else{
 		console.log(response.status)
 	}

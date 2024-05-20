@@ -9,7 +9,7 @@ from os import environ
 
 db = SQLAlchemy()
 scheduler = APScheduler()
-# filename = f'/var/log/fp/{datetime.date} - fp.log
+#filename = f'/var/log/fp/{datetime.date.today()} - fp.log'
 
 filename = f'{environ["VIRTUAL_ENV"]}/../logs/{datetime.date.today()} - fp.log'
 logging.basicConfig(filename=filename,
@@ -18,7 +18,7 @@ logging.basicConfig(filename=filename,
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = ''
+app.config['SECRET_KEY'] = 'dDePhATUZPsNFDHRTWJ6Eg'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hella_db.sqlite'
 app.config['SCHEDULER_API_ENABLED'] = True
 db.init_app(app)

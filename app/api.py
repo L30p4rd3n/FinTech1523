@@ -3,7 +3,7 @@ from os import environ
 import random
 
 import flask
-from flask import render_template, request, Blueprint, current_app
+from flask import render_template, request, Blueprint, current_app, Response
 from app import db, User, UG, Gstock, UGS
 from flask_login import current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -65,7 +65,7 @@ def new_day():
     user = UG.query.filter_by(uid=current_user.id).first()
     day, money, salary = user.day, user.money, user.salary
 
-    if day <= 31:
+    if day < 31:
         user.money += decimal.Decimal(salary)
         user.day += 1
         day += 1
@@ -78,8 +78,7 @@ def new_day():
             "day": day,
             "money": money,
         }
-    else:
-        return "Game Over", 202
+    return "",202
 
 
 @g.route('/skip', methods=["post"])
@@ -116,7 +115,7 @@ def check_stock():
     names = []
 
     conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
-    # conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/var/app-instance/hella_db.sqlite')
+    #conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}../var/app-instance/hella_db.sqlite')
 
     c = conn.cursor()
     for i in range(len(gsids)):
@@ -154,8 +153,8 @@ def buy():
     except ValueError:
         current_app.logger.error("Invalid data in function %s: %s, %s", "buy", num, cnt)
         return "", 400
-    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
-    # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
+    #conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')  # that sucks
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}../var/app-instance/hella_db.sqlite')
     c = conn.cursor()
     c.execute(f"SELECT * FROM Gstock WHERE date={day} AND bid={num}")
     a = c.fetchone()
@@ -184,7 +183,7 @@ def buy():
         conn.rollback()
         db.session.rollback()
         current_app.logger.error("Error:", error)
-        return ":(", 500
+        return "",500
 
     finally:
         conn.commit()
@@ -207,8 +206,8 @@ def sell():
         current_app.logger.error("Invalid data in function %s: %s, %s", "sell", num, cnt)
         return "", 400
 
-    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
-    # conn = sqlite3.connect("/var/www/scproj/scproj/var/app-instance/hella_db.sqlite")
+    #conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}/../instance/hella_db.sqlite')
+    conn = sqlite3.connect(f'{environ["VIRTUAL_ENV"]}../var/app-instance/hella_db.sqlite')
     c = conn.cursor()
     c.execute(f"SELECT * FROM Gstock WHERE date={day} AND bid={num}")
     a = c.fetchone()
@@ -241,7 +240,7 @@ def sell():
         conn.rollback()
         db.session.rollback()
         current_app.logger.error("Error:", error)
-        return ":(", 500
+        return "", 500
 
     finally:
         conn.commit()
