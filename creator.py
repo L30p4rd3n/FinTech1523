@@ -64,3 +64,17 @@ def change_name():
         db.session.commit()
 #change_name()
 
+def create_adv():
+    f = open("app/advices.txt", encoding="utf-8")
+    a = f.readline().replace('\n', '')
+    i = 0
+    while a:
+        a = f.readline().replace('\n', '')
+        with app.app_context():
+            adv = Advise(adv = a, type = i % 5 + 1)
+            db.session.add(adv)
+            db.session.commit()
+        i += 1
+    print(f"created {i} advs")
+    return 0
+#create_adv()

@@ -47,7 +47,12 @@ class User(UserMixin, db.Model):
 class Advise(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     adv = db.Column(db.String(1000))
+    type = db.Column(db.Integer)
+
+class AU(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer)
+    aid = db.Column(db.Integer)
 
 
 class Stocks(db.Model):

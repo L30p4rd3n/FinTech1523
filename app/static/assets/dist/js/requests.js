@@ -114,9 +114,25 @@ async function getOptionURL(url){
 	}else if(response.status == 204){
 		console.log("уже поработал");
 	}else if (response.status == 202){
+<<<<<<< Updated upstream
 		log("Игра окончена. Спасибо за потраченное на нее время! Через 10 секунд вас автоматически переместит на главную страницу, где будут выведены советы по улучшению финансового профиля.");
 		await sleep(10000);
 		window.location.href='/'
+=======
+		
+		log("Игра окончена. Спасибо за потраченное на нее время!\n Как только советы будут загружены, вас автоматически переместит на главую страницу, где будут выведены советы.\n");
+		log("Не уходите со страницы до автоматического перемещения! Это может сломать процесс загрузки советов, отчего вам придется создавать новый аккаунт!");
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '/game/genadv');
+		xhr.send();
+		xhr.timeout = 25000;
+		xhr.onload = function() {
+		  if (xhr.status == 200) { 
+		    console.log(200);
+			window.location.href='/'
+		  }
+		};		
+>>>>>>> Stashed changes
 	}
 	else{
 		console.log(response.status);
@@ -228,10 +244,27 @@ async function sendData(url){
 		
 	}else if(response.status == 204){
 		console.log(204);
+<<<<<<< Updated upstream
 	}else if(response.status == 202){
 		log("Игра окончена. Спасибо за потраченное на нее время!\n Через 10 секунд вас автоматически переместит на главую\n страницу, где будут выведены советы.");
 		await sleep(10000);
 		window.location.href='/'
+=======
+	}else if (response.status == 202){
+		
+		log("Игра окончена. Спасибо за потраченное на нее время!\n Как только советы будут загружены, вас автоматически переместит на главую страницу, где будут выведены советы.\n");
+		log("Не уходите со страницы до автоматического перемещения! Это может сломать процесс загрузки советов, отчего вам придется создавать новый аккаунт!");
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', '/game/genadv');
+		xhr.send();
+		xhr.timeout = 25000;
+		xhr.onload = function() {
+		  if (xhr.status == 200) { 
+		    console.log(200);
+			window.location.href='/';
+		  }
+		};		
+>>>>>>> Stashed changes
 	}else{
 		console.log(response.status)
 	}

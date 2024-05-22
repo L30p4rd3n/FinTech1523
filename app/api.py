@@ -3,8 +3,13 @@ from os import environ
 import random
 
 import flask
+<<<<<<< Updated upstream
 from flask import render_template, request, Blueprint, current_app
 from app import db, User, UG, Gstock, UGS
+=======
+from flask import render_template, request, Blueprint, current_app, Response
+from app import db, User, UG, Gstock, UGS, AU
+>>>>>>> Stashed changes
 from flask_login import current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -39,6 +44,9 @@ def change():
 def delete_user():
     who = User.query.filter_by(id=current_user.id).first()
     who_ug = UG.query.filter_by(uid=current_user.id).first()
+    who_au = AU.query.filter_by(uid=current_user.id).all()
+    for i in who_au:
+        db.session.delete(i)
     db.session.delete(who)
     db.session.delete(who_ug)
     db.session.commit()

@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 import random
 
-from app import db, User, Advise, UG
+from app import db, User, Advise, UG, AU
 
 auth = Blueprint('auth', __name__)
 
@@ -27,9 +27,13 @@ def index1():
 def getadv():
     advices = []
     try:
-        advices = [i.adv for i in Advise.query.filter_by(uid=current_user.id).all()]
-    except TypeError:
+        advices = [i.aid for i in AU.query.filter_by(uid=current_user.id).all()]
+        for i in range(len(advices)):
+            a = Advise.query.filter_by(id=advices[i]).first()
+            advices[i] = a.adv
+    except Exception:
         advices = []
+        current_app.logger.error(Exception)
     return {"msg": advices}, 200
 
 @auth.route('/profile')
